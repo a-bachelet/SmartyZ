@@ -10,8 +10,9 @@ import React, { useState } from "react";
 import { AuthContext, AuthContexts } from "../contexts/AuthContext";
 
 // Pages Imports
-import Login from "../pages/Login";
 import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Module from "../pages/Module";
 
 const PrivateRoute = ({ component, isAuthenticated, ...rest }: any) => {
   const routeComponent = (props: any) =>
@@ -48,6 +49,7 @@ export default () => {
             isAuthenticated={authCtxState.auth.isAuthenticated}
           />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/modules/:id" component={Module}></Route>
           <StatusBar style="auto" />
         </View>
       </NativeRouter>

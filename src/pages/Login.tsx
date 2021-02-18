@@ -1,6 +1,8 @@
+// Partial Libraries Imports
+import { withRouter } from "react-router-native";
+
 // Full Libraries Imports
 import React from "react";
-import { withRouter } from "react-router-native";
 
 // Contexts Imports
 import { AuthContext } from "../contexts/AuthContext";
