@@ -1,3 +1,6 @@
-export default function Metrics() {
+// Full Libraries Imports
+import React from "react";
+
+export default () => {
   return <div></div>;
-}
+};
