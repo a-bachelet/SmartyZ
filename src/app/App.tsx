@@ -1,6 +1,7 @@
 // Partial Libraries Imports
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
+import { Provider, useSelector } from "react-redux";
 import { NativeRouter, Redirect, Route } from "react-router-native";
 
 // Full Libraries Imports
@@ -13,6 +14,9 @@ import { AuthContext, AuthContexts } from "../contexts/AuthContext";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Module from "../pages/Module";
+
+// Redux Imports
+import Store from "../redux/Store";
 
 const PrivateRoute = ({ component, isAuthenticated, ...rest }: any) => {
   const routeComponent = (props: any) =>
@@ -39,21 +43,23 @@ export default () => {
   };
 
   return (
-    <AuthContext.Provider value={authCtxState}>
-      <NativeRouter>
-        <View style={styles.container}>
-          <PrivateRoute
-            exact
-            path="/"
-            component={Home}
-            isAuthenticated={authCtxState.auth.isAuthenticated}
-          />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/modules/:id" component={Module}></Route>
-          <StatusBar style="auto" />
-        </View>
-      </NativeRouter>
-    </AuthContext.Provider>
+    <Provider store={Store}>
+      <AuthContext.Provider value={authCtxState}>
+        <NativeRouter>
+          <View style={styles.container}>
+            <PrivateRoute
+              exact
+              path="/"
+              component={Home}
+              isAuthenticated={authCtxState.auth.isAuthenticated}
+            />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/modules/:id" component={Module}></Route>
+            <StatusBar style="auto" />
+          </View>
+        </NativeRouter>
+      </AuthContext.Provider>
+    </Provider>
   );
 };
 

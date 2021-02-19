@@ -1,4 +1,4 @@
-export type Alert = {
+export default interface Alert {
   label: string;
   date: Date;
-};
+}
