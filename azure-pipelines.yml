@@ -21,6 +21,7 @@ jobs:
 
 - job: npminstall
   displayName: Install packages
+  dependsOn: NodeTool
   steps:
   - script: |
       npm install
@@ -29,6 +30,7 @@ jobs:
 
 - job: runhttpserver
   displayName: Run HTTP Server
+  dependsOn: npminstall
   steps:
   - script: |
       rm -rf dist
@@ -45,6 +47,7 @@ jobs:
 
 - job: TurtleBuildAndroid
   displayName: Turtle - Build Android
+  dependsOn: TurtleSetupAndroid
   steps:
   - script: |
       EXPO_ANDROID_KEYSTORE_PASSWORD=$(EXPO_ANDROID_KEYSTORE_PASSWORD) EXPO_ANDROID_KEY_PASSWORD=$(EXPO_ANDROID_KEY_PASSWORD) turtle build:android -u $(EXPO_CLI_USER) -p $(EXPO_CLI_PASSWORD) --keystore-path $(keystore.secureFilePath) --keystore-alias $(keystore-alias) -t apk --allow-non-https-public-url --public-url http://127.0.0.1:8000/android-index.json
@@ -56,6 +59,7 @@ jobs:
 
 - job:
   displayName: Publish Android APK
+  dependsOn: TurtleBuildAndroid
   steps:
   - task: PublishBuildArtifacts@1
     inputs:
