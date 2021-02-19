@@ -3,6 +3,12 @@ trigger:
 - develop
 
 steps:
+- task: DownloadSecureFile@1
+  name: keystore
+  displayName: 'SmartyZ Keystore'
+  inputs:
+    secureFile: 'smartyz.keystore'
+
 - task: NodeTool@0
   inputs: 
    versionSpec: '10.x'
@@ -19,7 +25,7 @@ steps:
    npx expo publish --non-interactive --release-channel deployment
    
    turtle setup:android
-   EXPO_ANDROID_KEYSTORE_PASSWORD=$(EXPO_ANDROID_KEYSTORE_PASSWORD) EXPO_ANDROID_KEY_PASSWORD=$(EXPO_ANDROID_KEY_PASSWORD) turtle build:android -u $(EXPO_CLI_USER) -p $(EXPO_CLI_PASSWORD) --keystore-path <keystore_path> --keystore-alias $(keystore-alias) -t apk --release-channel deployment 
+   EXPO_ANDROID_KEYSTORE_PASSWORD=$(EXPO_ANDROID_KEYSTORE_PASSWORD) EXPO_ANDROID_KEY_PASSWORD=$(EXPO_ANDROID_KEY_PASSWORD) turtle build:android -u $(EXPO_CLI_USER) -p $(EXPO_CLI_PASSWORD) --keystore-path $(keystore.secureFilePath) --keystore-alias $(keystore-alias) -t apk --release-channel deployment 
    
    cd /users/vsts/expo-apps
    export A=$(ls *.apk)
