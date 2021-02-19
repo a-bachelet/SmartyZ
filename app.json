@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.smartyz"
+      "package": "local.smartyz.mobileapp"
     },
     "web": {
       "favicon": "./assets/favicon.png",
