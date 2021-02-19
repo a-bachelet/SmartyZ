@@ -1,6 +1,6 @@
 // Partial libraries Imports
-import { View } from "react-native";
-import { NativeRouter, Route, withRouter } from "react-router-native";
+import { View, Text, Pressable } from "react-native";
+import { withRouter } from "react-router-native";
 
 // Full Libraries Imports
 import React from "react";
@@ -12,9 +12,15 @@ export default withRouter(({ history }) => {
 
   return (
     <View>
-      <div>Home</div>
-      <div onClick={() => goToModule(1)}>Module 1</div>
-      <div onClick={() => goToModule(2)}>Module 2</div>
+      <View>
+        <Text>Home</Text>
+      </View>
+      <Pressable onPress={() => goToModule(1)}>
+        <Text>Module 1</Text>
+      </Pressable>
+      <Pressable onPress={() => goToModule(2)}>
+        <Text>Module 2</Text>
+      </Pressable>
     </View>
   );
 });

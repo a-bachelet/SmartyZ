@@ -1,4 +1,5 @@
 // Partial Libraries Imports
+import { Button } from "react-native";
 import { withRouter } from "react-router-native";
 
 // Full Libraries Imports
@@ -11,14 +12,13 @@ export default withRouter(({ history }) => {
   return (
     <AuthContext.Consumer>
       {({ auth, toggleAuth }) => (
-        <button
-          onClick={() => {
+        <Button
+          onPress={() => {
             toggleAuth();
             history.push("/");
           }}
-        >
-          Login
-        </button>
+          title="Login"
+        />
       )}
     </AuthContext.Consumer>
   );
