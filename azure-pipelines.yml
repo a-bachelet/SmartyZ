@@ -23,7 +23,7 @@ steps:
    
    rm -rf dist
    expo export --dev --public-url http://127.0.0.1:8000
-   npx http-server -p 8000 dist
+   npx http-server -p 8000 dist &
 
    curl http://127.0.0.1:8000/android-index.json
    mkdir -p /home/vsts/expo-apps
