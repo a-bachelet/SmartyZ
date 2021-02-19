@@ -6,8 +6,10 @@ import {
 } from "./Types";
 
 const initialState: ModuleState = {
-  data: [],
-  isLoading: false,
+  modules: [],
+  isModulesLoading: false,
+  module: null,
+  isModuleLoading: false,
 };
 
 export default (
@@ -17,8 +19,10 @@ export default (
   switch (action.type) {
     case FETCH_MODULES_REQUEST:
       return {
-        data: [...state.data],
-        isLoading: state.isLoading,
+        modules: [...state.modules],
+        isModulesLoading: false,
+        module: state.module,
+        isModuleLoading: false,
       };
     default:
       return state;

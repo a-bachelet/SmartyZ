@@ -4,8 +4,10 @@ import Module from "../../types/Module";
 //#region State
 
 export interface ModuleState {
-  data: Module[];
-  isLoading: boolean;
+  modules: Module[];
+  isModulesLoading: boolean;
+  module: Module | null;
+  isModuleLoading: boolean;
 }
 
 //#endregion State
