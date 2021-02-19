@@ -1,6 +1,13 @@
+// Partial Libraries Imports
+import { Text, View } from "react-native";
+
 // Full Libraries Imports
 import React from "react";
 
 export default () => {
-  return <div>Module Alerts</div>;
+  return (
+    <View>
+      <Text>Module Alerts</Text>
+    </View>
+  );
 };
