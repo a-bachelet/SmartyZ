@@ -41,6 +41,7 @@ jobs:
 
 - job: TurtleSetupAndroid
   displayName: Turtle - Setup Android
+  dependsOn: npminstall
   steps:
   - script: |
       turtle setup:android
