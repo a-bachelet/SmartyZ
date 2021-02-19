@@ -1,14 +1,15 @@
+// Global Libraries Imports
+import "react-native-gesture-handler";
+
 // Partial Libraries Imports
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
-import { Provider, useSelector } from "react-redux";
-import { NativeRouter, Redirect, Route } from "react-router-native";
+import { Provider } from "react-redux";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 // Full Libraries Imports
-import React, { useState } from "react";
-
-// Contexts Imports
-import { AuthContext, AuthContexts } from "../contexts/AuthContext";
+import React from "react";
 
 // Pages Imports
 import Home from "../pages/Home";
@@ -18,47 +19,21 @@ import Module from "../pages/Module";
 // Redux Imports
 import Store from "../redux/Store";
 
-const PrivateRoute = ({ component, isAuthenticated, ...rest }: any) => {
-  const routeComponent = (props: any) =>
-    isAuthenticated ? (
-      React.createElement(component, props)
-    ) : (
-      <Redirect to={{ pathname: "/login" }} />
-    );
-  return <Route {...rest} render={routeComponent} />;
-};
+const Stack = createStackNavigator();
 
 export default () => {
-  const [authValue, setAuthValue] = useState(AuthContexts.loggedOut);
-
-  const toggleAuth = () => {
-    setAuthValue(
-      authValue.isAuthenticated ? AuthContexts.loggedOut : AuthContexts.loggedIn
-    );
-  };
-
-  let authCtxState = {
-    auth: authValue,
-    toggleAuth,
-  };
-
   return (
     <Provider store={Store}>
-      <AuthContext.Provider value={authCtxState}>
-        <NativeRouter>
-          <View style={styles.container}>
-            <PrivateRoute
-              exact
-              path="/"
-              component={Home}
-              isAuthenticated={authCtxState.auth.isAuthenticated}
-            />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/modules/:id" component={Module}></Route>
-            <StatusBar style="auto" />
-          </View>
-        </NativeRouter>
-      </AuthContext.Provider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            options={{ headerShown: false }}
+            component={Home}
+          />
+          <Stack.Screen name="Login" component={Login} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 };
