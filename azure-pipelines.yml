@@ -2,68 +2,46 @@
 trigger:
 - develop
 
-jobs:
+steps:
+- task: DownloadSecureFile@1
+  name: keystore
+  displayName: 'SmartyZ Keystore'
+  inputs:
+    secureFile: 'smartyz.keystore'
 
-- job: DownloadSecureFile
-  displayName: Download Keystore file
-  steps:
-  - task: DownloadSecureFile@1
-    name: keystore
-    inputs:
-      secureFile: 'smartyz.keystore'
+- task: NodeTool@0
+  inputs: 
+   versionSpec: '10.x'
+   
+  displayName: 'Install Node.js'
 
-- job: NodeTool
-  displayName: Install Node.js
-  steps:
-  - task: NodeTool@0
-    inputs: 
-      versionSpec: '10.x'
+- script: |
+   npm install
+   
+   npm install -g expo-cli
+   npm install -g turtle-cli
+   
+   rm -rf dist
+   expo export --dev --public-url http://127.0.0.1:8000
+   npx http-server -p 8000 dist &
 
-- job: npminstall
-  displayName: Install packages
-  dependsOn: NodeTool
-  steps:
-  - script: |
-      npm install
-      npm install -g expo-cli
-      npm install -g turtle-cli
+   curl http://127.0.0.1:8000/android-index.json
+   mkdir -p /home/vsts/expo-apps
+   
+   turtle setup:android
+   EXPO_ANDROID_KEYSTORE_PASSWORD=$(EXPO_ANDROID_KEYSTORE_PASSWORD) EXPO_ANDROID_KEY_PASSWORD=$(EXPO_ANDROID_KEY_PASSWORD) turtle build:android -u $(EXPO_CLI_USER) -p $(EXPO_CLI_PASSWORD) --keystore-path $(keystore.secureFilePath) --keystore-alias $(keystore-alias) -t apk --allow-non-https-public-url --public-url http://127.0.0.1:8000/android-index.json
+   
+   cd /home/vsts/expo-apps
+   export A=$(ls *.apk)
+   echo "##vso[task.setvariable variable=androidArtifact]$A"
+   echo "File name to publish Android"
+   echo $A
+  displayName: 'npm install and Expo & turtle build'
 
-- job: runhttpserver
-  displayName: Run HTTP Server
-  dependsOn: npminstall
-  steps:
-  - script: |
-      rm -rf dist
-      expo export --dev --public-url http://127.0.0.1:8000
-      npx http-server -p 8000 dist &
-      curl http://127.0.0.1:8000/android-index.json
-      mkdir -p /home/vsts/expo-apps
-
-- job: TurtleSetupAndroid
-  displayName: Turtle - Setup Android
-  dependsOn: npminstall
-  steps:
-  - script: |
-      turtle setup:android
-
-- job: TurtleBuildAndroid
-  displayName: Turtle - Build Android
-  dependsOn: TurtleSetupAndroid
-  steps:
-  - script: |
-      EXPO_ANDROID_KEYSTORE_PASSWORD=$(EXPO_ANDROID_KEYSTORE_PASSWORD) EXPO_ANDROID_KEY_PASSWORD=$(EXPO_ANDROID_KEY_PASSWORD) turtle build:android -u $(EXPO_CLI_USER) -p $(EXPO_CLI_PASSWORD) --keystore-path $(keystore.secureFilePath) --keystore-alias $(keystore-alias) -t apk --allow-non-https-public-url --public-url http://127.0.0.1:8000/android-index.json
-      cd /home/vsts/expo-apps
-      export A=$(ls *.apk)
-      echo "##vso[task.setvariable variable=androidArtifact]$A"
-      echo "File name to publish Android"
-      echo $A
-
-- job:
-  displayName: Publish Android APK
-  dependsOn: TurtleBuildAndroid
-  steps:
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: "/home/vsts/expo-apps/$(androidArtifact)"
-      ArtifactName: 'android'
-      publishLocation: 'Container'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: "/home/vsts/expo-apps/$(androidArtifact)"
+    ArtifactName: 'android'
+    publishLocation: 'Container'
+    
+  displayName: 'Publish Android'
