@@ -14,12 +14,16 @@ import React from "react";
 // Pages Imports
 import Home from "../pages/Home";
 import Login from "../pages/Login";
-import Module from "../pages/Module";
 
 // Redux Imports
 import Store from "../redux/Store";
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Login: undefined,
+  Home: undefined
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default () => {
   return (
@@ -27,11 +31,15 @@ export default () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="Login"
+            options={{ headerShown: false }}
+            component={Login}
+          />
+          <Stack.Screen
             name="Home"
             options={{ headerShown: false }}
             component={Home}
           />
-          <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
