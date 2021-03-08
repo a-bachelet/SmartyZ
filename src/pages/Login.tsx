@@ -1,25 +1,19 @@
 // Partial Libraries Imports
 import { Button } from "react-native";
-import { withRouter } from "react-router-native";
 
 // Full Libraries Imports
 import React from "react";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from '../app/App';
 
-// Contexts Imports
-import { AuthContext } from "../contexts/AuthContext";
-
-export default withRouter(({ history }) => {
+export default ({ navigation } : { navigation : StackNavigationProp<RootStackParamList, 'Login'> }) => {
   return (
-    <AuthContext.Consumer>
-      {({ auth, toggleAuth }) => (
-        <Button
-          onPress={() => {
-            toggleAuth();
-            history.push("/");
-          }}
-          title="Login"
-        />
-      )}
-    </AuthContext.Consumer>
+    <Button
+      onPress={() => {
+        navigation.push('Home');
+        console.log("CLICKED LOGIN BUTTON !");
+      }}
+      title="Login"
+    />
   );
-});
+};
