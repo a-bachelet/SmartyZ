@@ -1,13 +1,12 @@
 // Partial libraries Imports
 import { View, Text, Pressable } from "react-native";
-import { withRouter } from "react-router-native";
 
 // Full Libraries Imports
 import React from "react";
 
-export default withRouter(({ history }) => {
+export default () => {
   const goToModule = (id: number) => {
-    history.push(`/modules/${id}`);
+    console.log(id);
   };
 
   return (
@@ -23,4 +22,4 @@ export default withRouter(({ history }) => {
       </Pressable>
     </View>
   );
-});
+};
