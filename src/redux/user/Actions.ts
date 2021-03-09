@@ -17,7 +17,7 @@ import {
 // Types Imports
 import User from "../../types/User";
 
-export const fetchUser = (username: String, password: String) => {
+export const fetchUser = (username: string, password: string) => {
   return (dispatch: Dispatch) => {
     dispatch(fetchUserStarted());
 
