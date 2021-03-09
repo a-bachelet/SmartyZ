@@ -62,3 +62,13 @@ steps:
     publishLocation: 'Container'
     
   displayName: 'Publish Android'
+
+- task: AppCenterDistribute@3
+  inputs:
+    serverEndpoint: 'SmartyZ App Center'
+    appSlug: 'simon.cotelle/SmartyZ'
+    appFile: '/home/vsts/expo-apps/$(androidArtifact)'
+    symbolsOption: 'Android'
+    releaseNotesOption: 'input'
+    releaseNotesInput: '$(androidArtifact)'
+    destinationType: 'groups'
