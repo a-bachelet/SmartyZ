@@ -9,6 +9,16 @@ steps:
   inputs:
     secureFile: 'smartyz.keystore'
 
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SmartyZ - SonarCloud'
+    organization: 'smartyz'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'D3P4_SmartyZ---Mobile'
+    cliProjectName: 'SmartyZ - Mobile'
+    cliSources: '.'
+
 - task: NodeTool@0
   inputs: 
    versionSpec: '10.x'
@@ -37,6 +47,12 @@ steps:
    echo "File name to publish Android"
    echo $A
   displayName: 'npm install and Expo & turtle build'
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
 
 - task: PublishBuildArtifacts@1
   inputs:
