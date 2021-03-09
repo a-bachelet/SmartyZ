@@ -8,6 +8,7 @@ import {
   Text,
   View,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -42,90 +43,89 @@ export default function ({
   const isUserError = useSelector((state: RootState) => state.user.isUserError);
 
   return (
-    <View
-      style={{
-        backgroundColor: "#3B3B3B",
-        height: "100%",
-        paddingTop: "100px",
-      }}
-    >
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <FontAwesomeIcon
-          style={{ color: "#F5DF4D", marginBottom: "100px" }}
-          size={152}
-          icon={faThermometerHalf}
-        />
-      </View>
-      <View style={{ alignItems: "center" }}>
-        <TextInput
-          textContentType="username"
-          placeholder="Username"
-          style={{
-            height: 40,
-            width: "90%",
-            borderColor: "gray",
-            borderWidth: 1,
-            borderRadius: "25px",
-            backgroundColor: "#fefefe",
-            fontSize: "25px",
-            minHeight: "72px",
-            paddingLeft: "40px",
-            marginBottom: "35px",
+    <View style={styles.rootContainer}>
+      <FontAwesomeIcon
+        style={styles.icon}
+        size={152}
+        icon={faThermometerHalf}
+      />
+      <TextInput
+        textContentType="username"
+        placeholder="Username"
+        style={styles.input}
+        onChangeText={onChangeUsername}
+        value={usernameValue}
+      />
+      <TextInput
+        secureTextEntry={true}
+        textContentType="newPassword"
+        placeholder="Password"
+        style={styles.input}
+        onChangeText={onChangePassword}
+        value={passwordValue}
+      />
+      <Text style={[styles.errorMessage, { opacity: isUserError ? 1 : 0 }]}>
+        Bad credentials.
+      </Text>
+      {!isUserLoading ? (
+        <TouchableOpacity
+          style={styles.loginButton}
+          disabled={!usernameValue || !passwordValue || isUserLoading}
+          onPress={() => {
+            dispatch(fetchUser(usernameValue, passwordValue));
           }}
-          onChangeText={onChangeUsername}
-          value={usernameValue}
-        />
-      </View>
-      <View style={{ alignItems: "center" }}>
-        <TextInput
-          secureTextEntry={true}
-          textContentType="newPassword"
-          placeholder="Password"
-          style={{
-            height: 40,
-            width: "90%",
-            borderColor: "gray",
-            borderWidth: 1,
-            borderRadius: "25px",
-            backgroundColor: "#fefefe",
-            fontSize: "25px",
-            minHeight: "72px",
-            paddingLeft: "40px",
-            marginBottom: "45px",
-          }}
-          onChangeText={onChangePassword}
-          value={passwordValue}
-        />
-      </View>
-      <View style={{ alignItems: "center", marginBottom: "15px" }}>
-        {isUserError && !user && (
-          <Text style={{ fontSize: "22px", color: "#FF0000" }}>
-            Bad credentials.
-          </Text>
-        )}
-      </View>
-      <View style={{ alignItems: "center" }}>
-        {!isUserLoading ? (
-          <TouchableOpacity
-            style={{
-              width: "90%",
-              borderRadius: "25px",
-              minHeight: "50px",
-              backgroundColor: "#F5DF4D",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            disabled={!usernameValue || !passwordValue || isUserLoading}
-            onPress={() => {
-              dispatch(fetchUser(usernameValue, passwordValue));
-            }}
-          >
-            <Text style={{ fontSize: "22px", color: "#FFFFFF" }}>Login</Text>
-          </TouchableOpacity>
-        ) : (
-          <ActivityIndicator />
-        )}
-      </View>
+        >
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+      ) : (
+        <ActivityIndicator color="#F5DF4D" style={styles.activityIndicator} />
+      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  rootContainer: {
+    backgroundColor: "#3B3B3B",
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  icon: {
+    color: "#F5DF4D",
+    marginBottom: "100px",
+  },
+  input: {
+    backgroundColor: "#FEFEFE",
+    borderColor: "gray",
+    borderRadius: 25,
+    borderWidth: 1,
+    fontSize: 22,
+    height: 40,
+    marginBottom: "35px",
+    minHeight: "72px",
+    paddingLeft: "40px",
+    width: "90%",
+  },
+  errorMessage: {
+    marginBottom: "35px",
+    color: "#FF0000",
+    fontSize: 18,
+  },
+  loginButton: {
+    alignItems: "center",
+    backgroundColor: "#F5DF4D",
+    borderRadius: 25,
+    justifyContent: "center",
+    minHeight: "50px",
+    width: "90%",
+  },
+  activityIndicator: {
+    minHeight: "50px",
+  },
+  loginButtonText: {
+    color: "#FFFFFF",
+    fontSize: 22,
+  },
+});
