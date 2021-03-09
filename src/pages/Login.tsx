@@ -86,11 +86,11 @@ export default function ({
 
 const styles = StyleSheet.create({
   rootContainer: {
+    alignItems: "center",
     backgroundColor: "#3B3B3B",
     flex: 1,
     height: "100%",
     justifyContent: "center",
-    alignItems: "center",
   },
   icon: {
     color: "#F5DF4D",
