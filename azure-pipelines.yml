@@ -72,3 +72,4 @@ steps:
     releaseNotesOption: 'input'
     releaseNotesInput: '$(androidArtifact)'
     destinationType: 'groups'
+    distributionGroupId: '900e1672-f7fc-4f1c-b978-deb405ae3372'
