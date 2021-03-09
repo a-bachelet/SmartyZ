@@ -18,8 +18,8 @@ import Login from "../pages/Login";
 import Store from "../redux/Store";
 
 export type RootStackParamList = {
-  Login: undefined,
-  Home: undefined
+  Login: undefined;
+  Home: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

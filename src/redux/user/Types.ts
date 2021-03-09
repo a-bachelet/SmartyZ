@@ -19,21 +19,24 @@ export const FETCH_USER_FAILURE = "@user/FETCH_USER_FAILURE";
 
 interface FetchUserStarted {
   type: typeof FETCH_USER_STARTED;
-  payload: {}
+  payload: {};
 }
 
 interface FetchUserSuccess {
   type: typeof FETCH_USER_SUCCESS;
   payload: {
-    user: User
-  }
+    user: User;
+  };
 }
 
 interface FetchUserFailure {
   type: typeof FETCH_USER_FAILURE;
-  payload: {}
+  payload: {};
 }
 
 //#endregion Requests
 
-export type UserActionsTypes = FetchUserStarted | FetchUserSuccess | FetchUserFailure;
+export type UserActionsTypes =
+  | FetchUserStarted
+  | FetchUserSuccess
+  | FetchUserFailure;
