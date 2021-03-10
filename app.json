@@ -2,7 +2,7 @@
   "expo": {
     "name": "smartyz",
     "slug": "smartyz",
-    "version": "1.0.0",
+    "version": "dev-1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
