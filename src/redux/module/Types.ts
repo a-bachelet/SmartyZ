@@ -1,4 +1,5 @@
 // Types Imports
+import Alert from "../../types/Alert";
 import Metric from "../../types/Metric";
 import Module from "../../types/Module";
 
@@ -8,12 +9,17 @@ export interface ModuleState {
   moduleList: Module[];
   currentModule: Module | null;
   currentModuleMetrics: Metric | null;
+  currentModuleAlerts: Alert[];
   isModuleListLoading: boolean;
   isCurrentModuleLoading: boolean;
   isCurrentModuleMetricsLoading: boolean;
+  isCurrentModuleAlertsLoading: boolean;
+  isDeleteAlertLoading: boolean;
   isModuleListError: boolean;
   isCurrentModuleError: boolean;
   isCurrentModuleMetricsError: boolean;
+  isCurrentModuleAlertsError: boolean;
+  isDeleteAlertError: boolean;
 }
 
 //#endregion State
@@ -37,6 +43,19 @@ export const FETCH_CURRENT_MODULE_METRICS_SUCCESS =
   "@module/FETCH_CURRENT_MODULE_METRICS_SUCCESS";
 export const FETCH_CURRENT_MODULE_METRICS_FAILURE =
   "@module/FETCH_CURRENT_MODULE_METRICS_FAILURE";
+
+export const FETCH_CURRENT_MODULE_ALERTS_STARTED =
+  "@module/FETCH_CURRENT_MODULE_ALERTS_STARTED";
+
+export const FETCH_CURRENT_MODULE_ALERTS_SUCCESS =
+  "@module/FETCH_CURRENT_MODULE_ALERTS_SUCCESS";
+
+export const FETCH_CURRENT_MODULE_ALERTS_FAILURE =
+  "@module/FETCH_CURRENT_MODULE_ALERTS_FAILURE";
+
+export const DELETE_ALERT_STARTED = "@module/DELETE_ALERT_STARTED";
+export const DELETE_ALERT_SUCCESS = "@module/DELETE_ALERT_SUCCESS";
+export const DELETE_ALERT_FAILURE = "@module/DELETE_ALERT_FAILURE";
 
 interface FetchModuleListStarted {
   type: typeof FETCH_MODULE_LIST_STARTED;
@@ -89,6 +108,38 @@ interface FetchCurrentModuleMetricsFailure {
   payload: {};
 }
 
+interface FetchCurrentModuleAlertsStarted {
+  type: typeof FETCH_CURRENT_MODULE_ALERTS_STARTED;
+  payload: {};
+}
+
+interface FetchCurrentModuleAlertsSuccess {
+  type: typeof FETCH_CURRENT_MODULE_ALERTS_SUCCESS;
+  payload: {
+    alerts: Alert[];
+  };
+}
+
+interface FetchCurrentModuleAlertsFailure {
+  type: typeof FETCH_CURRENT_MODULE_ALERTS_FAILURE;
+  payload: {};
+}
+
+interface DeleteAlertStarted {
+  type: typeof DELETE_ALERT_STARTED;
+  payload: {};
+}
+
+interface DeleteAlertSuccess {
+  type: typeof DELETE_ALERT_SUCCESS;
+  payload: {};
+}
+
+interface DeleteAlertFailure {
+  type: typeof DELETE_ALERT_FAILURE;
+  payload: {};
+}
+
 //#endregion Requests
 
 export type ModuleActionsTypes =
@@ -100,4 +151,10 @@ export type ModuleActionsTypes =
   | FetchCurrentModuleFailure
   | FetchCurrentModuleMetricsStarted
   | FetchCurrentModuleMetricsSuccess
-  | FetchCurrentModuleMetricsFailure;
+  | FetchCurrentModuleMetricsFailure
+  | FetchCurrentModuleAlertsStarted
+  | FetchCurrentModuleAlertsSuccess
+  | FetchCurrentModuleAlertsFailure
+  | DeleteAlertStarted
+  | DeleteAlertSuccess
+  | DeleteAlertFailure;
