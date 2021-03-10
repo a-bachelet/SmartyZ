@@ -39,7 +39,7 @@ export default (props: any) => {
         <Text
           style={{
             color: "#FFFFFF",
-            fontWeight: 500,
+            fontWeight: "500",
             fontSize: 24,
           }}
         >
