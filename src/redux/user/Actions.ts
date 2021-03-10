@@ -2,6 +2,7 @@
 import axios from "axios";
 
 // Partial Libraries Imports
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Dispatch } from "redux";
 
 // Environment Imports
@@ -17,7 +18,14 @@ import {
 // Types Imports
 import User from "../../types/User";
 
-export const fetchUser = (username: string, password: string) => {
+// Navigation Imports
+import { RootStackParamList } from "../../app/App";
+
+export const fetchUser = (
+  username: string,
+  password: string,
+  navigation: StackNavigationProp<RootStackParamList, "Login">
+) => {
   return (dispatch: Dispatch) => {
     dispatch(fetchUserStarted());
 
@@ -32,8 +40,11 @@ export const fetchUser = (username: string, password: string) => {
             username: res.data.username,
             name: res.data.name,
             password,
+            token: Buffer.from(`${username}:${password}`).toString("base64"),
           })
         );
+
+        navigation.push("Home");
       })
       .catch((err) => {
         dispatch(fetchUserFailure());

@@ -22,13 +22,20 @@ import { RootStackParamList } from "../app/App";
 import { RootState } from "../redux/CombineReducers";
 import { fetchUser } from "../redux/user/Actions";
 
+// Environment Imports
+import { ENVIRONMENT } from "../../env.json";
+
 export default function ({
   navigation,
 }: {
   navigation: StackNavigationProp<RootStackParamList, "Login">;
 }) {
-  const [usernameValue, onChangeUsername] = React.useState("");
-  const [passwordValue, onChangePassword] = React.useState("");
+  const [usernameValue, onChangeUsername] = React.useState(
+    ENVIRONMENT === "dev" ? "User1" : ""
+  );
+  const [passwordValue, onChangePassword] = React.useState(
+    ENVIRONMENT === "dev" ? "Azerty@123" : ""
+  );
 
   const dispatch = useDispatch();
 
@@ -37,13 +44,6 @@ export default function ({
   );
 
   const isUserError = useSelector((state: RootState) => state.user.isUserError);
-
-  useSelector((state: RootState) => {
-    if (state.user.user) {
-      navigation.push("Home");
-    }
-    return state.user.user;
-  });
 
   return (
     <View style={styles.rootContainer}>
@@ -75,7 +75,7 @@ export default function ({
           style={styles.loginButton}
           disabled={!usernameValue || !passwordValue || isUserLoading}
           onPress={() => {
-            dispatch(fetchUser(usernameValue, passwordValue));
+            dispatch(fetchUser(usernameValue, passwordValue, navigation));
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>

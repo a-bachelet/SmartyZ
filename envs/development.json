@@ -1,3 +1,4 @@
 {
+  "ENVIRONMENT": "dev",
   "API_URL": "http://localhost:55002/api/"
 }
