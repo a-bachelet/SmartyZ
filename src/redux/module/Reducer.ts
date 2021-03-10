@@ -2,14 +2,21 @@
 import {
   ModuleState,
   ModuleActionsTypes,
-  FETCH_MODULES_REQUEST,
+  FETCH_MODULE_LIST_STARTED,
+  FETCH_MODULE_LIST_SUCCESS,
+  FETCH_MODULE_LIST_FAILURE,
+  FETCH_CURRENT_MODULE_STARTED,
+  FETCH_CURRENT_MODULE_SUCCESS,
+  FETCH_CURRENT_MODULE_FAILURE,
 } from "./Types";
 
 const initialState: ModuleState = {
-  modules: [],
-  isModulesLoading: false,
-  module: null,
-  isModuleLoading: false,
+  moduleList: [],
+  currentModule: null,
+  isModuleListLoading: false,
+  isModuleListError: false,
+  isCurrentModuleLoading: false,
+  isCurrentModuleError: false,
 };
 
 export default (
@@ -17,12 +24,42 @@ export default (
   action: ModuleActionsTypes
 ): ModuleState => {
   switch (action.type) {
-    case FETCH_MODULES_REQUEST:
+    case FETCH_MODULE_LIST_STARTED:
       return {
-        modules: [...state.modules],
-        isModulesLoading: false,
-        module: state.module,
-        isModuleLoading: false,
+        ...state,
+        isModuleListLoading: true,
+        isModuleListError: false,
+      };
+    case FETCH_MODULE_LIST_SUCCESS:
+      return {
+        ...state,
+        moduleList: action.payload.moduleList,
+        isModuleListLoading: false,
+      };
+    case FETCH_MODULE_LIST_SUCCESS:
+      return {
+        ...state,
+        isModuleListLoading: false,
+        isModuleListError: true,
+      };
+    case FETCH_CURRENT_MODULE_STARTED:
+      return {
+        ...state,
+        isCurrentModuleLoading: true,
+        isCurrentModuleError: false,
+      };
+    case FETCH_CURRENT_MODULE_SUCCESS:
+      return {
+        ...state,
+        currentModule: action.payload.currentModule,
+        isCurrentModuleLoading: false,
+        isCurrentModuleError: false,
+      };
+    case FETCH_CURRENT_MODULE_FAILURE:
+      return {
+        ...state,
+        isCurrentModuleLoading: false,
+        isCurrentModuleError: true,
       };
     default:
       return state;
