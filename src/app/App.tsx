@@ -12,6 +12,7 @@ import React from "react";
 // Pages Imports
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Module from "../pages/Module";
 
 // Redux Imports
 import Store from "../redux/Store";
@@ -19,6 +20,7 @@ import Store from "../redux/Store";
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
+  Module: { id: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -37,6 +39,11 @@ export default () => {
             name="Home"
             options={{ headerShown: false }}
             component={Home}
+          />
+          <Stack.Screen
+            name="Module"
+            options={{ headerShown: false }}
+            component={Module}
           />
         </Stack.Navigator>
       </NavigationContainer>

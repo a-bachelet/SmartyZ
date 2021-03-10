@@ -1,4 +1,5 @@
 // Partial libraries Imports
+import { StackNavigationProp } from "@react-navigation/stack";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,7 +13,14 @@ import { RootState } from "../redux/CombineReducers";
 // Redux Actions Imports
 import { fetchModuleList } from "../redux/module/Actions";
 
-export default () => {
+// Navigation Imports
+import { RootStackParamList } from "../app/App";
+
+export default function ({
+  navigation,
+}: {
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+}) {
   const dispatch = useDispatch();
 
   const user = useSelector((state: RootState) => state.user.user);
@@ -39,7 +47,11 @@ export default () => {
     console.log(moduleList);
     setModuleListToDisplay(
       moduleList.map((module) => (
-        <Module key={module.id} module={module}></Module>
+        <Module
+          key={module.id}
+          module={module}
+          navigation={navigation}
+        ></Module>
       ))
     );
   }, [moduleList]);
@@ -64,7 +76,7 @@ export default () => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   rootContainer: {

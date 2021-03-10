@@ -1,4 +1,5 @@
 // Partial Libraries Imports
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 // Full Libraries Imports
@@ -14,9 +15,15 @@ import {
 // Types Imports
 import Module from "../../types/Module";
 
-export default (props: { module: Module }) => {
+// Navigation Imports
+import { RootStackParamList } from "../../app/App";
+
+export default (props: {
+  module: Module;
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+}) => {
   const goToModule = (id: string) => {
-    console.log(id);
+    props.navigation.push("Module", { id });
   };
 
   return (
