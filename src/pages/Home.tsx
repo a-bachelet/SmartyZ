@@ -1,14 +1,11 @@
 // Partial libraries Imports
-import { View, Text, Pressable } from "react-native";
+import { View, Text } from "react-native";
 
 // Full Libraries Imports
 import React from "react";
 import Module from "../components/home/Module";
 
 export default () => {
-  const goToModule = (id: number) => {
-    console.log(id);
-  };
 
   return (
     <View style={{ height: "100%", backgroundColor: "#3B3B3B" }}>
