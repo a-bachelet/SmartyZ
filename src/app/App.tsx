@@ -16,6 +16,15 @@ import Login from "../pages/Login";
 // Redux Imports
 import Store from "../redux/Store";
 
+// Sentry Imports
+import * as Sentry from 'sentry-expo';
+
+Sentry.init({
+  dsn: 'https://4245efd413ae497abaa8e2a7e730393e@o547706.ingest.sentry.io/5670312',
+  enableInExpoDevelopment: true,
+  debug: false,
+});
+
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
