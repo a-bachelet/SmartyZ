@@ -42,7 +42,18 @@ export const fetchModuleList = (token: string) => {
         },
       })
       .then((res) => {
-        dispatch(fetchModuleListSuccess(res.data));
+        const moduleList = res.data.map((m: any) => {
+          return {
+            id: m.id,
+            code: m.code,
+            label: m.name,
+            currentMetric: {
+              temperature: parseFloat(m.temperature).toFixed(2),
+              humidity: parseFloat(m.humidity).toFixed(2),
+            },
+          };
+        });
+        dispatch(fetchModuleListSuccess(moduleList));
       })
       .catch((err) => {
         dispatch(fetchModuleListFailure());
