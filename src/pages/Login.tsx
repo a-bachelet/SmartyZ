@@ -31,16 +31,19 @@ export default function ({
   const [passwordValue, onChangePassword] = React.useState("");
 
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => {
+
+  const isUserLoading = useSelector(
+    (state: RootState) => state.user.isUserLoading
+  );
+
+  const isUserError = useSelector((state: RootState) => state.user.isUserError);
+
+  useSelector((state: RootState) => {
     if (state.user.user) {
       navigation.push("Home");
     }
     return state.user.user;
   });
-  const isUserLoading = useSelector(
-    (state: RootState) => state.user.isUserLoading
-  );
-  const isUserError = useSelector((state: RootState) => state.user.isUserError);
 
   return (
     <View style={styles.rootContainer}>
