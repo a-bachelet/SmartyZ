@@ -36,7 +36,7 @@ export default (
         moduleList: action.payload.moduleList,
         isModuleListLoading: false,
       };
-    case FETCH_MODULE_LIST_SUCCESS:
+    case FETCH_MODULE_LIST_FAILURE:
       return {
         ...state,
         isModuleListLoading: false,
