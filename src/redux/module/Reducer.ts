@@ -8,15 +8,21 @@ import {
   FETCH_CURRENT_MODULE_STARTED,
   FETCH_CURRENT_MODULE_SUCCESS,
   FETCH_CURRENT_MODULE_FAILURE,
+  FETCH_CURRENT_MODULE_METRICS_STARTED,
+  FETCH_CURRENT_MODULE_METRICS_SUCCESS,
+  FETCH_CURRENT_MODULE_METRICS_FAILURE,
 } from "./Types";
 
 const initialState: ModuleState = {
   moduleList: [],
   currentModule: null,
+  currentModuleMetrics: null,
   isModuleListLoading: false,
   isModuleListError: false,
   isCurrentModuleLoading: false,
   isCurrentModuleError: false,
+  isCurrentModuleMetricsLoading: false,
+  isCurrentModuleMetricsError: false,
 };
 
 export default (
@@ -60,6 +66,25 @@ export default (
         ...state,
         isCurrentModuleLoading: false,
         isCurrentModuleError: true,
+      };
+    case FETCH_CURRENT_MODULE_METRICS_STARTED:
+      return {
+        ...state,
+        isCurrentModuleMetricsLoading: true,
+        isCurrentModuleMetricsError: false,
+      };
+    case FETCH_CURRENT_MODULE_METRICS_SUCCESS:
+      return {
+        ...state,
+        currentModuleMetrics: action.payload.metrics,
+        isCurrentModuleMetricsLoading: false,
+        isCurrentModuleMetricsError: false,
+      };
+    case FETCH_CURRENT_MODULE_METRICS_FAILURE:
+      return {
+        ...state,
+        isCurrentModuleMetricsLoading: false,
+        isCurrentModuleMetricsError: true,
       };
     default:
       return state;
