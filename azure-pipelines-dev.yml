@@ -1,0 +1,81 @@
+
+trigger:
+- develop
+
+steps:
+- task: DownloadSecureFile@1
+  name: keystore
+  displayName: 'SmartyZ Keystore'
+  inputs:
+    secureFile: 'smartyz.keystore'
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SmartyZ - SonarCloud'
+    organization: 'smartyz'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'D3P4_SmartyZ---Mobile'
+    cliProjectName: 'SmartyZ - Mobile'
+    cliSources: '.'
+
+- task: NodeTool@0
+  inputs: 
+   versionSpec: '10.x'
+   
+  displayName: 'Install Node.js'
+
+- script: |
+   apt update -y
+   apt install jq -y
+   export VERSION=$(jq -r '.expo.version' app.json)
+
+   npm install
+   
+   npm install -g expo-cli
+   npm install -g turtle-cli
+   
+   rm -rf dist
+   expo export --dev --public-url http://127.0.0.1:8000
+   npx http-server -p 8000 dist &
+
+   curl http://127.0.0.1:8000/android-index.json
+   mkdir -p /home/vsts/expo-apps
+   
+   npm run env:dev
+
+   turtle setup:android
+   EXPO_ANDROID_KEYSTORE_PASSWORD=$(EXPO_ANDROID_KEYSTORE_PASSWORD) EXPO_ANDROID_KEY_PASSWORD=$(EXPO_ANDROID_KEY_PASSWORD) turtle build:android -u $(EXPO_CLI_USER) -p $(EXPO_CLI_PASSWORD) --keystore-path $(keystore.secureFilePath) --keystore-alias $(keystore-alias) -t apk --allow-non-https-public-url --public-url http://127.0.0.1:8000/android-index.json
+   
+   cd /home/vsts/expo-apps
+   mv *.apk smartyz-$VERSION.apk
+   export A=$(ls *.apk)
+   echo "##vso[task.setvariable variable=androidArtifact]$A"
+   echo "File name to publish Android"
+   echo $A
+  displayName: 'npm install and Expo & turtle build'
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: "/home/vsts/expo-apps/$(androidArtifact)"
+    ArtifactName: 'android'
+    publishLocation: 'Container'
+    
+  displayName: 'Publish Android'
+
+- task: AppCenterDistribute@3
+  inputs:
+    serverEndpoint: 'SmartyZ App Center'
+    appSlug: 'simon.cotelle/SmartyZ'
+    appFile: '/home/vsts/expo-apps/$(androidArtifact)'
+    symbolsOption: 'Android'
+    releaseNotesOption: 'input'
+    releaseNotesInput: '$(androidArtifact)'
+    destinationType: 'groups'
+    distributionGroupId: '900e1672-f7fc-4f1c-b978-deb405ae3372'

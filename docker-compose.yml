@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  api:
+    image: smartyzprodregistry.azurecr.io/smartyzapi:dev-latest
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - smartyz
+    ports:
+      - 55002:80
+
+networks:
+  smartyz:
+    driver: bridge
