@@ -1,4 +1,5 @@
 // Types Imports
+import Metric from "../../types/Metric";
 import Module from "../../types/Module";
 
 //#region State
@@ -6,10 +7,13 @@ import Module from "../../types/Module";
 export interface ModuleState {
   moduleList: Module[];
   currentModule: Module | null;
+  currentModuleMetrics: Metric | null;
   isModuleListLoading: boolean;
   isCurrentModuleLoading: boolean;
+  isCurrentModuleMetricsLoading: boolean;
   isModuleListError: boolean;
   isCurrentModuleError: boolean;
+  isCurrentModuleMetricsError: boolean;
 }
 
 //#endregion State
@@ -26,6 +30,13 @@ export const FETCH_CURRENT_MODULE_SUCCESS =
   "@module/FETCH_CURRENT_MODULE_SUCCESS";
 export const FETCH_CURRENT_MODULE_FAILURE =
   "@module/FETCH_CURRENT_MODULE_FAILURE";
+
+export const FETCH_CURRENT_MODULE_METRICS_STARTED =
+  "@module/FETCH_CURRENT_MODULE_METRICS_STARTED";
+export const FETCH_CURRENT_MODULE_METRICS_SUCCESS =
+  "@module/FETCH_CURRENT_MODULE_METRICS_SUCCESS";
+export const FETCH_CURRENT_MODULE_METRICS_FAILURE =
+  "@module/FETCH_CURRENT_MODULE_METRICS_FAILURE";
 
 interface FetchModuleListStarted {
   type: typeof FETCH_MODULE_LIST_STARTED;
@@ -61,6 +72,23 @@ interface FetchCurrentModuleFailure {
   payload: {};
 }
 
+interface FetchCurrentModuleMetricsStarted {
+  type: typeof FETCH_CURRENT_MODULE_METRICS_STARTED;
+  payload: {};
+}
+
+interface FetchCurrentModuleMetricsSuccess {
+  type: typeof FETCH_CURRENT_MODULE_METRICS_SUCCESS;
+  payload: {
+    metrics: Metric | null;
+  };
+}
+
+interface FetchCurrentModuleMetricsFailure {
+  type: typeof FETCH_CURRENT_MODULE_METRICS_FAILURE;
+  payload: {};
+}
+
 //#endregion Requests
 
 export type ModuleActionsTypes =
@@ -69,4 +97,7 @@ export type ModuleActionsTypes =
   | FetchModuleListFailure
   | FetchCurrentModuleStarted
   | FetchCurrentModuleSuccess
-  | FetchCurrentModuleFailure;
+  | FetchCurrentModuleFailure
+  | FetchCurrentModuleMetricsStarted
+  | FetchCurrentModuleMetricsSuccess
+  | FetchCurrentModuleMetricsFailure;
