@@ -1,87 +1,134 @@
 // Partial Libraries Imports
-import { Button, TextInput, TouchableOpacity, Text, View } from "react-native";
-import { withRouter } from "react-router-native";
+import { faThermometerHalf } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { StackNavigationProp } from "@react-navigation/stack";
+import {
+  TextInput,
+  TouchableOpacity,
+  Text,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 // Full Libraries Imports
 import React from "react";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from '../app/App';
 
-// Contexts Imports
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faThermometerHalf } from "@fortawesome/free-solid-svg-icons";
+// Navigation Imports
+import { RootStackParamList } from "../app/App";
 
-export default ({ navigation } : { navigation : StackNavigationProp<RootStackParamList, 'Login'> }) => {
+// Redux Imports
+import { RootState } from "../redux/CombineReducers";
+import { fetchUser } from "../redux/user/Actions";
+
+export default function ({
+  navigation,
+}: {
+  navigation: StackNavigationProp<RootStackParamList, "Login">;
+}) {
   const [usernameValue, onChangeUsername] = React.useState("");
   const [passwordValue, onChangePassword] = React.useState("");
+
+  const dispatch = useDispatch();
+
+  const isUserLoading = useSelector(
+    (state: RootState) => state.user.isUserLoading
+  );
+
+  const isUserError = useSelector((state: RootState) => state.user.isUserError);
+
+  useSelector((state: RootState) => {
+    if (state.user.user) {
+      navigation.push("Home");
+    }
+    return state.user.user;
+  });
+
   return (
-    <View style={{backgroundColor: '#3B3B3B', height:'100%', paddingTop:'100px'}}>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <FontAwesomeIcon
-          style={{ color: "#F5DF4D", marginBottom: "100px"}}
-          size={152}
-          icon={faThermometerHalf}
-        />
-      </View>
-      <View style={{alignItems: 'center'}}>
-        <TextInput
-          textContentType="username"
-          placeholder="Username"
-          style={{
-            height: 40,
-            width: '90%',
-            borderColor: "gray",
-            borderWidth: 1,
-            borderRadius: "25px",
-            backgroundColor: "#fefefe",
-            fontSize: "25px",
-            minHeight: "72px",
-            paddingLeft: "40px",
-            marginBottom: "35px"
-          }}
-          onChangeText={(text) => onChangeUsername(text)}
-          value={usernameValue}
-        />
-      </View>
-      <View style={{alignItems: 'center'}}>
-        <TextInput
-          secureTextEntry={true}
-          textContentType="newPassword"
-          placeholder="Password"
-          style={{
-            height: 40,
-            width: '90%',
-            borderColor: "gray",
-            borderWidth: 1,
-            borderRadius: "25px",
-            backgroundColor: "#fefefe",
-            fontSize: "25px",
-            minHeight: "72px",
-            paddingLeft: "40px",
-            marginBottom: "45px",
-          }}
-          onChangeText={(text) => onChangePassword(text)}
-          value={passwordValue}
-        />
-      </View>
-      <View  style={{alignItems: 'center'}}>
+    <View style={styles.rootContainer}>
+      <FontAwesomeIcon
+        style={styles.icon}
+        size={152}
+        icon={faThermometerHalf}
+      />
+      <TextInput
+        textContentType="username"
+        placeholder="Username"
+        style={styles.input}
+        onChangeText={onChangeUsername}
+        value={usernameValue}
+      />
+      <TextInput
+        secureTextEntry={true}
+        textContentType="newPassword"
+        placeholder="Password"
+        style={styles.input}
+        onChangeText={onChangePassword}
+        value={passwordValue}
+      />
+      <Text style={[styles.errorMessage, { opacity: isUserError ? 1 : 0 }]}>
+        Bad credentials.
+      </Text>
+      {!isUserLoading ? (
         <TouchableOpacity
-        onPress={() => {
-          navigation.push('Home');
-          console.log("CLICKED LOGIN BUTTON !");
-        }}
-          style={{
-            width: '90%',
-            borderRadius: "25px",
-            minHeight: "50px",
-            backgroundColor: "#F5DF4D",
-            alignItems: "center",
-            justifyContent: "center",
+          style={styles.loginButton}
+          disabled={!usernameValue || !passwordValue || isUserLoading}
+          onPress={() => {
+            dispatch(fetchUser(usernameValue, passwordValue));
           }}
         >
-          <Text style={{ fontSize: "22px", color: "#FFFFFF" }}>Login</Text>
+          <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
-      </View>
+      ) : (
+        <ActivityIndicator color="#F5DF4D" style={styles.activityIndicator} />
+      )}
     </View>
   );
-};
+}
+
+const styles = StyleSheet.create({
+  rootContainer: {
+    alignItems: "center",
+    backgroundColor: "#3B3B3B",
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+  },
+  icon: {
+    color: "#F5DF4D",
+    marginBottom: "100px",
+  },
+  input: {
+    backgroundColor: "#FEFEFE",
+    borderColor: "gray",
+    borderRadius: 25,
+    borderWidth: 1,
+    fontSize: 22,
+    height: 40,
+    marginBottom: "35px",
+    minHeight: "72px",
+    paddingLeft: "40px",
+    width: "90%",
+  },
+  errorMessage: {
+    marginBottom: "35px",
+    color: "#FF0000",
+    fontSize: 18,
+  },
+  loginButton: {
+    alignItems: "center",
+    backgroundColor: "#F5DF4D",
+    borderRadius: 25,
+    justifyContent: "center",
+    minHeight: "50px",
+    width: "90%",
+  },
+  activityIndicator: {
+    minHeight: "50px",
+  },
+  loginButtonText: {
+    color: "#FFFFFF",
+    fontSize: 22,
+  },
+});
