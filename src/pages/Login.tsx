@@ -66,6 +66,10 @@ export default ({ navigation } : { navigation : StackNavigationProp<RootStackPar
       </View>
       <View  style={{alignItems: 'center'}}>
         <TouchableOpacity
+        onPress={() => {
+          navigation.push('Home');
+          console.log("CLICKED LOGIN BUTTON !");
+        }}
           style={{
             width: '90%',
             borderRadius: "25px",
