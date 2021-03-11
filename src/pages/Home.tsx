@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     alignSelf: "center",
-    minHeight: "50px",
+    minHeight: 50,
   },
   errorMessage: {
     alignSelf: "center",
