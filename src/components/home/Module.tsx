@@ -1,4 +1,5 @@
 // Partial Libraries Imports
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 // Full Libraries Imports
@@ -14,17 +15,20 @@ import {
 // Types Imports
 import Module from "../../types/Module";
 
-export default (props: { module: Module }) => {
-  const goToModule = (id: string) => {
-    console.log(id);
+// Navigation Imports
+import { RootStackParamList } from "../../app/App";
+
+export default (props: {
+  module: Module;
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+}) => {
+  const goToModule = () => {
+    props.navigation.push("Module", { module: props.module });
   };
 
   return (
     <View style={styles.rootContainer}>
-      <Pressable
-        style={styles.innerContainer}
-        onPress={() => goToModule(props.module.id)}
-      >
+      <Pressable style={styles.innerContainer} onPress={goToModule}>
         <FontAwesomeIcon style={styles.colorSucces} icon={faCircle} />
 
         <Text>{props.module.label}</Text>

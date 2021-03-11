@@ -1,4 +1,5 @@
 // Partial libraries Imports
+import { StackNavigationProp } from "@react-navigation/stack";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,7 +13,14 @@ import { RootState } from "../redux/CombineReducers";
 // Redux Actions Imports
 import { fetchModuleList } from "../redux/module/Actions";
 
-export default () => {
+// Navigation Imports
+import { RootStackParamList } from "../app/App";
+
+export default function ({
+  navigation,
+}: {
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+}) {
   const dispatch = useDispatch();
 
   const user = useSelector((state: RootState) => state.user.user);
@@ -36,17 +44,22 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    console.log(moduleList);
     setModuleListToDisplay(
       moduleList.map((module) => (
-        <Module key={module.id} module={module}></Module>
+        <Module
+          key={module.id}
+          module={module}
+          navigation={navigation}
+        ></Module>
       ))
     );
   }, [moduleList]);
 
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.title}>{user?.name}</Text>
+      <View style={styles.title}>
+        <Text style={styles.titleText}>{user?.name}</Text>
+      </View>
       <View style={styles.moduleList}>
         {isModuleListError ? (
           <Text style={styles.errorMessage}>An error occured</Text>
@@ -64,7 +77,7 @@ export default () => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -72,15 +85,20 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   title: {
+    alignItems: "center",
+    flexDirection: "row",
+    height: 80,
+    justifyContent: "center",
+  },
+  titleText: {
     alignSelf: "center",
     color: "#FFFFFF",
     fontWeight: "500",
     fontSize: 24,
-    marginTop: 35,
   },
   moduleList: {
-    marginTop: "calc(100px - 35px - 24px)",
-    height: "calc(100% - 110px)",
+    marginTop: "",
+    height: "calc(100% - 80px)",
     paddingTop: 15,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -88,7 +106,7 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     alignSelf: "center",
-    minHeight: "50px",
+    minHeight: 50,
   },
   errorMessage: {
     alignSelf: "center",

@@ -44,7 +44,7 @@ export const fetchUser = (
           })
         );
 
-        navigation.push("Home");
+        navigation.navigate("Home");
       })
       .catch((err) => {
         dispatch(fetchUserFailure());
