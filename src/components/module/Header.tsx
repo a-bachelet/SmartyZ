@@ -11,7 +11,6 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -46,7 +45,11 @@ const tabs: (
         <Text style={[styles.linkText, active ? styles.linkTextActive : {}]}>
           {tab}
         </Text>
-        {tab === "Alerts" && <View style={styles.alertsCircle}>1</View>}
+        {tab === "Alerts" && (
+          <View style={styles.alertsCircle}>
+            <Text style={styles.alertsCircleText}>1</Text>
+          </View>
+        )}
       </Pressable>
     );
   });
@@ -117,9 +120,9 @@ export default function (props: {
             />
           </Pressable>
         </View>
-        <SafeAreaView style={styles.bottomMenuContainer}>
+        <View style={styles.bottomMenuContainer}>
           {tabs(props.tab, props.navigation)}
-        </SafeAreaView>
+        </View>
       </View>
     </>
   );
@@ -191,15 +194,17 @@ const styles = StyleSheet.create({
   },
   alertsCircle: {
     alignItems: "center",
-    backgroundColor: "#FF0000",
+    backgroundColor: "#e74c3c",
     borderRadius: 100,
-    color: "#FFF",
-    fontSize: 10,
-    fontWeight: "bold",
     height: 15,
     justifyContent: "center",
     marginLeft: 6,
     textAlign: "center",
     width: 15,
+  },
+  alertsCircleText: {
+    color: "#FFF",
+    fontSize: 10,
+    fontWeight: "bold",
   },
 });

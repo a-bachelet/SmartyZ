@@ -15,9 +15,15 @@ import {
   EDIT_MODULE_NAME_FAILURE,
   EDIT_MODULE_NAME_STARTED,
   EDIT_MODULE_NAME_SUCCESS,
+  FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE,
+  FETCH_CURRENT_MODULE_ALERTS_COUNT_STARTED,
+  FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS,
   FETCH_CURRENT_MODULE_ALERTS_FAILURE,
   FETCH_CURRENT_MODULE_ALERTS_STARTED,
   FETCH_CURRENT_MODULE_ALERTS_SUCCESS,
+  FETCH_CURRENT_MODULE_ANALYTICS_FAILURE,
+  FETCH_CURRENT_MODULE_ANALYTICS_STARTED,
+  FETCH_CURRENT_MODULE_ANALYTICS_SUCCESS,
   FETCH_CURRENT_MODULE_FAILURE,
   FETCH_CURRENT_MODULE_METRICS_FAILURE,
   FETCH_CURRENT_MODULE_METRICS_STARTED,
@@ -33,6 +39,7 @@ import {
 import Module from "../../types/Module";
 import Metric from "../../types/Metric";
 import Alert from "../../types/Alert";
+import { Analytic } from "../../types/Analytic";
 
 export const fetchModuleList = (token: string) => {
   return (dispatch: Dispatch) => {
@@ -156,13 +163,20 @@ export const fetchCurrentModuleAlerts = (token: string, id: string) => {
     dispatch(fetchCurrentModuleAlertsStarted());
 
     axios
-      .get(`${API_URL}module/${id}/alerts`, {
+      .get(`${API_URL}alert/${id}`, {
         headers: {
           Authorization: `Basic ${token}`,
         },
       })
       .then((res) => {
-        dispatch(fetchCurrentModuleAlertsSuccess(res.data));
+        dispatch(
+          fetchCurrentModuleAlertsSuccess(
+            res.data.map((a: Alert) => {
+              a.date = new Date(a.date);
+              return a;
+            })
+          )
+        );
       })
       .catch((err) => {
         dispatch(fetchCurrentModuleAlertsFailure());
@@ -185,22 +199,18 @@ const fetchCurrentModuleAlertsFailure = () => ({
   type: FETCH_CURRENT_MODULE_ALERTS_FAILURE,
 });
 
-export const deleteAlert = (
-  token: string,
-  moduleId: string,
-  alertId: string
-) => {
+export const deleteAlert = (token: string, alertId: string) => {
   return (dispatch: Dispatch) => {
     dispatch(deleteAlertStarted());
 
     axios
-      .delete(`${API_URL}module/${moduleId}/alerts/${alertId}`, {
+      .delete(`${API_URL}alert/${alertId}/delete`, {
         headers: {
           Authorization: `Basic ${token}`,
         },
       })
       .then((res) => {
-        dispatch(deleteAlertSuccess());
+        dispatch(deleteAlertSuccess(alertId));
       })
       .catch((err) => {
         dispatch(deleteAlertFailure());
@@ -212,8 +222,11 @@ const deleteAlertStarted = () => ({
   type: DELETE_ALERT_STARTED,
 });
 
-const deleteAlertSuccess = () => ({
+const deleteAlertSuccess = (alertId: string) => ({
   type: DELETE_ALERT_SUCCESS,
+  payload: {
+    alertId,
+  },
 });
 
 const deleteAlertFailure = () => ({
@@ -277,4 +290,82 @@ const editModuleNameSuccess = (module: Module) => ({
 
 const editModuleNameFailure = () => ({
   type: EDIT_MODULE_NAME_FAILURE,
+});
+
+export const fetchCurrentModuleAnalytics = (
+  token: string,
+  moduleId: string
+) => {
+  return (dispatch: Dispatch) => {
+    dispatch(fetchCurrentModuleAnalyticsStarted());
+
+    axios
+      .get(`${API_URL}module/${moduleId}/analytic`, {
+        headers: {
+          Authorization: `Basic ${token}`,
+        },
+      })
+      .then((res) => {
+        dispatch(
+          fetchCurrentModuleAnalyticsSuccess(
+            res.data.map((a: Analytic) => {
+              a.date = new Date(a.date);
+              return a;
+            })
+          )
+        );
+      })
+      .catch((err) => {
+        dispatch(fetchCurrentModuleAnalyticsFailure());
+      });
+  };
+};
+
+const fetchCurrentModuleAnalyticsStarted = () => ({
+  type: FETCH_CURRENT_MODULE_ANALYTICS_STARTED,
+});
+
+const fetchCurrentModuleAnalyticsSuccess = (analytics: Analytic[]) => ({
+  type: FETCH_CURRENT_MODULE_ANALYTICS_SUCCESS,
+  payload: {
+    analytics,
+  },
+});
+
+const fetchCurrentModuleAnalyticsFailure = () => ({
+  type: FETCH_CURRENT_MODULE_ANALYTICS_FAILURE,
+});
+
+export const fetchCurrentModuleAlertsCount = (token: string, id: string) => {
+  return (dispatch: Dispatch) => {
+    dispatch(fetchCurrentModuleAlertsCountStarted());
+
+    axios
+      .get(`${API_URL}alert/${id}`, {
+        headers: {
+          Authorization: `Basic ${token}`,
+        },
+      })
+      .then((res) => {
+        dispatch(fetchCurrentModuleAlertsCountSuccess(res.data));
+      })
+      .catch((err) => {
+        dispatch(fetchCurrentModuleAlertsCountFailure());
+      });
+  };
+};
+
+const fetchCurrentModuleAlertsCountStarted = () => ({
+  type: FETCH_CURRENT_MODULE_ALERTS_COUNT_STARTED,
+});
+
+const fetchCurrentModuleAlertsCountSuccess = (count: number) => ({
+  type: FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS,
+  payload: {
+    count,
+  },
+});
+
+const fetchCurrentModuleAlertsCountFailure = () => ({
+  type: FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE,
 });

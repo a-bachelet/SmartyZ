@@ -5,13 +5,26 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
+import { deleteAlert } from "../../../redux/module/Actions";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../redux/CombineReducers";
 
-export default () => {
+export default (props: { label: string; id: string }) => {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user.user);
+
   return (
     <View style={styles.card}>
       <View style={styles.grid}>
-        <Text style={styles.text}>Alert</Text>
-        <TouchableOpacity>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{props.label}</Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(deleteAlert(user?.token || "", props.id));
+          }}
+        >
           <FontAwesomeIcon style={styles.icon} size={24} icon={faTrashAlt} />
         </TouchableOpacity>
       </View>
@@ -53,8 +66,10 @@ const styles = StyleSheet.create({
     marginRight: 45,
   },
   text: {
-    marginLeft: 45,
-    fontWeight: 700,
+    fontWeight: "700",
     fontSize: 16,
+  },
+  textContainer: {
+    marginLeft: 45,
   },
 });
