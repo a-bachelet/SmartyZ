@@ -1,8 +1,6 @@
 // Partial Libraries Imports
-import { faThermometerHalf, faTint } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { RouteProp } from "@react-navigation/native";
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 // Full Libraries Imports
 import React from "react";

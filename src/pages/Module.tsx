@@ -41,12 +41,12 @@ export default (props: {
         cardStyle: styles.rootContainer,
         header: ({ scene, previous, navigation }) => {
           const { options } = scene.descriptor;
+          const finalTitle =
+            options.title !== undefined ? options.title : scene.route.name;
           const title =
             options.headerTitle !== undefined
               ? options.headerTitle
-              : options.title !== undefined
-              ? options.title
-              : scene.route.name;
+              : finalTitle;
 
           return (
             <Header

@@ -1,6 +1,6 @@
 // Partial Libraries Imports
 import { RouteProp } from "@react-navigation/native";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 // Full Libraries Imports
 import React, { useEffect, useState } from "react";

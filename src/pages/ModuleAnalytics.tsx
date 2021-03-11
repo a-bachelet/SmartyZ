@@ -1,6 +1,6 @@
 // Partial Libraries Imports
 import { RouteProp } from "@react-navigation/native";
-import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 // Full Libraries Imports
 import React, { useEffect } from "react";
@@ -11,8 +11,6 @@ import { Analytic } from "../types/Analytic";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/CombineReducers";
 import { fetchCurrentModuleAnalytics } from "../redux/module/Actions";
-import { LineChart } from "react-native-chart-kit";
-import Metric from "../types/Metric";
 import Chart from "../components/module/analytics/Chart";
 
 export default (props: {
