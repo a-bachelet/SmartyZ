@@ -1,3 +1,4 @@
 {
+  "ENVIRONMENT": "prod",
   "API_URL": "http://localhost-prod:55002/api/"
 }

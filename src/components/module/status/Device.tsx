@@ -27,7 +27,7 @@ export default () => {
         <Switch
         style={{marginRight: 45}}
           trackColor={{ false: 'rgba(34, 31, 31, 0.26)', true: "#2ECC71" }}
-          thumbColor={isEnabled ? "#f5dd4b" : "#2ECC71"}
+          thumbColor={isEnabled ? "#2ECC71" : "#E74C3C"}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
           value={isEnabled}
