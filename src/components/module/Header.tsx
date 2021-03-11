@@ -7,7 +7,7 @@ import {
   faPencilAlt,
   faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -21,13 +21,18 @@ import {
 import { RootStackParamList } from "../../app/App";
 import { ParamListBase } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { editModuleName } from "../../redux/module/Actions";
+import {
+  editModuleName,
+  fetchCurrentModuleAlertsCount,
+} from "../../redux/module/Actions";
 import { RootState } from "../../redux/CombineReducers";
 
 const tabs: (
   currentTab: string,
-  tabNavigation: StackNavigationProp<ParamListBase>
-) => JSX.Element[] = (currentTab, tabNavigation) => {
+  tabNavigation: StackNavigationProp<ParamListBase>,
+  isCountLoading: boolean,
+  count: number
+) => JSX.Element[] = (currentTab, tabNavigation, isCountLoading, count) => {
   return ["Status", "Analytics", "Alerts"].map((tab: string) => {
     const active: boolean = tab === currentTab;
     return (
@@ -45,9 +50,13 @@ const tabs: (
         <Text style={[styles.linkText, active ? styles.linkTextActive : {}]}>
           {tab}
         </Text>
-        {tab === "Alerts" && (
+        {tab === "Alerts" && count > 0 && (
           <View style={styles.alertsCircle}>
-            <Text style={styles.alertsCircleText}>1</Text>
+            {isCountLoading ? (
+              <ActivityIndicator color="#F5DF4D" />
+            ) : (
+              <Text style={styles.alertsCircleText}>{count}</Text>
+            )}
           </View>
         )}
       </Pressable>
@@ -67,12 +76,36 @@ export default function (props: {
 
   const user = useSelector((state: RootState) => state.user.user);
 
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchCurrentModuleAlertsCount(user.token, props.id));
+    }
+  }, []);
+
+  const alertsCount = useSelector(
+    (state: RootState) => state.module.currentModuleAlertsCount
+  );
+
+  const isAlertsCountLoading = useSelector(
+    (state: RootState) => state.module.isCurrentModuleAlertsCountLoading
+  );
+
   const isEditingModuleNameLoading: boolean = useSelector(
     (state: RootState) => state.module.isEditingModuleNameLoading
   );
 
   const [editing, setEditing] = useState(false);
   const [nameValue, setNameValue] = useState(props.name);
+  const [ac, setAc] = useState(alertsCount);
+  const [iacl, setIacl] = useState(isAlertsCountLoading);
+
+  useEffect(() => {
+    setAc(alertsCount);
+  }, [alertsCount]);
+
+  useEffect(() => {
+    setIacl(isAlertsCountLoading);
+  }, [isAlertsCountLoading]);
 
   const toggleEditing = () => {
     if (editing && nameValue !== props.name) {
@@ -121,7 +154,7 @@ export default function (props: {
           </Pressable>
         </View>
         <View style={styles.bottomMenuContainer}>
-          {tabs(props.tab, props.navigation)}
+          {tabs(props.tab, props.navigation, iacl, ac)}
         </View>
       </View>
     </>

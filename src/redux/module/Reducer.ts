@@ -116,6 +116,7 @@ export default (
     case FETCH_CURRENT_MODULE_ALERTS_STARTED:
       return {
         ...state,
+        isCurrentModuleAlertsCountLoading: true,
         isCurrentModuleAlertsLoading: true,
         isCurrentModuleAlertsError: false,
       };
@@ -123,12 +124,15 @@ export default (
       return {
         ...state,
         currentModuleAlerts: action.payload.alerts,
+        currentModuleAlertsCount: action.payload.alerts.length,
+        isCurrentModuleAlertsCountLoading: false,
         isCurrentModuleAlertsLoading: false,
         isCurrentModuleAlertsError: false,
       };
     case FETCH_CURRENT_MODULE_ALERTS_FAILURE:
       return {
         ...state,
+        isCurrentModuleAlertsCountLoading: false,
         isCurrentModuleAlertsLoading: false,
         isCurrentModuleAlertsError: true,
       };
@@ -147,6 +151,7 @@ export default (
       return {
         ...state,
         currentModuleAlerts: [...newAlerts],
+        currentModuleAlertsCount: newAlerts.length,
         isDeleteAlertLoading: false,
         isDeleteAlertError: false,
       };

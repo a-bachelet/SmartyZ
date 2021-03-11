@@ -341,7 +341,7 @@ export const fetchCurrentModuleAlertsCount = (token: string, id: string) => {
     dispatch(fetchCurrentModuleAlertsCountStarted());
 
     axios
-      .get(`${API_URL}alert/${id}`, {
+      .get(`${API_URL}alert/${id}/count`, {
         headers: {
           Authorization: `Basic ${token}`,
         },
