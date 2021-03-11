@@ -55,6 +55,7 @@ export default (props: {
               navigation={navigation}
               name={props.route.params.module.label}
               code={props.route.params.module.code}
+              id={props.route.params.module.id}
             />
           );
         },

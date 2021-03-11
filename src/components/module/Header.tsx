@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -20,6 +21,9 @@ import {
 // Navigation Imports
 import { RootStackParamList } from "../../app/App";
 import { ParamListBase } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { editModuleName } from "../../redux/module/Actions";
+import { RootState } from "../../redux/CombineReducers";
 
 const tabs: (
   currentTab: string,
@@ -30,7 +34,11 @@ const tabs: (
     return (
       <Pressable
         key={tab}
-        style={[styles.link, active ? styles.linkActive : {}]}
+        style={[
+          styles.link,
+          active ? styles.linkActive : {},
+          tab === "Alerts" ? styles.linkAlerts : {},
+        ]}
         onPress={() => {
           tabNavigation.push(tab);
         }}
@@ -38,6 +46,7 @@ const tabs: (
         <Text style={[styles.linkText, active ? styles.linkTextActive : {}]}>
           {tab}
         </Text>
+        {tab === "Alerts" && <View style={styles.alertsCircle}>1</View>}
       </Pressable>
     );
   });
@@ -49,11 +58,25 @@ export default function (props: {
   navigation: StackNavigationProp<ParamListBase>;
   name: string;
   code: string;
+  id: string;
 }) {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user.user);
+
+  const isEditingModuleNameLoading: boolean = useSelector(
+    (state: RootState) => state.module.isEditingModuleNameLoading
+  );
+
   const [editing, setEditing] = useState(false);
   const [nameValue, setNameValue] = useState(props.name);
 
-  const toggleEditing = () => setEditing(!editing);
+  const toggleEditing = () => {
+    if (editing && nameValue !== props.name) {
+      dispatch(editModuleName(user?.token || "", props.id, nameValue));
+    }
+    setEditing(!editing);
+  };
 
   return (
     <>
@@ -76,7 +99,11 @@ export default function (props: {
                 value={nameValue}
               />
             ) : nameValue ? (
-              <Text style={styles.title}>{nameValue}</Text>
+              isEditingModuleNameLoading ? (
+                <ActivityIndicator color="#F5DF4D" />
+              ) : (
+                <Text style={styles.title}>{nameValue}</Text>
+              )
             ) : (
               <></>
             )}
@@ -156,5 +183,23 @@ const styles = StyleSheet.create({
   },
   linkTextActive: {
     fontWeight: "500",
+  },
+  linkAlerts: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  alertsCircle: {
+    alignItems: "center",
+    backgroundColor: "#FF0000",
+    borderRadius: 100,
+    color: "#FFF",
+    fontSize: 10,
+    fontWeight: "bold",
+    height: 15,
+    justifyContent: "center",
+    marginLeft: 6,
+    textAlign: "center",
+    width: 15,
   },
 });

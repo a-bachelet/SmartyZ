@@ -12,6 +12,9 @@ import {
   DELETE_ALERT_FAILURE,
   DELETE_ALERT_STARTED,
   DELETE_ALERT_SUCCESS,
+  EDIT_MODULE_NAME_FAILURE,
+  EDIT_MODULE_NAME_STARTED,
+  EDIT_MODULE_NAME_SUCCESS,
   FETCH_CURRENT_MODULE_ALERTS_FAILURE,
   FETCH_CURRENT_MODULE_ALERTS_STARTED,
   FETCH_CURRENT_MODULE_ALERTS_SUCCESS,
@@ -211,4 +214,62 @@ const deleteAlertSuccess = () => ({
 
 const deleteAlertFailure = () => ({
   type: DELETE_ALERT_FAILURE,
+});
+
+export const editModuleName = (
+  token: string,
+  moduleId: string,
+  moduleName: string
+) => {
+  return (dispatch: Dispatch) => {
+    dispatch(editModuleNameStarted());
+
+    setTimeout(() => {
+      axios
+        .post(
+          `${API_URL}module/updateName`,
+          {
+            Id: moduleId,
+            Name: moduleName,
+          },
+          {
+            headers: {
+              Authorization: `Basic ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          dispatch(
+            editModuleNameSuccess({
+              id: res.data.id,
+              code: res.data.code,
+              label: res.data.name,
+              currentMetric: {
+                temperature: res.data.temperature,
+                humidity: res.data.humidity,
+              },
+              devices: res.data.devices,
+            })
+          );
+        })
+        .catch((err) => {
+          dispatch(editModuleNameFailure());
+        });
+    }, 3500);
+  };
+};
+
+const editModuleNameStarted = () => ({
+  type: EDIT_MODULE_NAME_STARTED,
+});
+
+const editModuleNameSuccess = (module: Module) => ({
+  type: EDIT_MODULE_NAME_SUCCESS,
+  payload: {
+    module,
+  },
+});
+
+const editModuleNameFailure = () => ({
+  type: EDIT_MODULE_NAME_FAILURE,
 });

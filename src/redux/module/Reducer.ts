@@ -17,6 +17,9 @@ import {
   DELETE_ALERT_STARTED,
   DELETE_ALERT_SUCCESS,
   DELETE_ALERT_FAILURE,
+  EDIT_MODULE_NAME_STARTED,
+  EDIT_MODULE_NAME_SUCCESS,
+  EDIT_MODULE_NAME_FAILURE,
 } from "./Types";
 
 const initialState: ModuleState = {
@@ -28,12 +31,14 @@ const initialState: ModuleState = {
   isModuleListError: false,
   isCurrentModuleLoading: false,
   isCurrentModuleAlertsLoading: false,
-  isDeleteAlertLoading: true,
+  isDeleteAlertLoading: false,
+  isEditingModuleNameLoading: false,
   isCurrentModuleError: false,
   isCurrentModuleMetricsLoading: false,
   isCurrentModuleMetricsError: false,
   isCurrentModuleAlertsError: false,
   isDeleteAlertError: false,
+  isEditingModuleNameError: false,
 };
 
 export default (
@@ -133,6 +138,32 @@ export default (
         ...state,
         isDeleteAlertLoading: false,
         isDeleteAlertError: true,
+      };
+    case EDIT_MODULE_NAME_STARTED:
+      return {
+        ...state,
+        isEditingModuleNameLoading: true,
+        isEditingModuleNameError: false,
+      };
+    case EDIT_MODULE_NAME_SUCCESS:
+      return {
+        ...state,
+        moduleList: state.moduleList.map((module) => {
+          if (module.id === action.payload.module.id) {
+            module.label = action.payload.module.label;
+          }
+
+          return module;
+        }),
+        currentModule: action.payload.module,
+        isEditingModuleNameLoading: false,
+        isEditingModuleNameError: false,
+      };
+    case EDIT_MODULE_NAME_FAILURE:
+      return {
+        ...state,
+        isEditingModuleNameLoading: false,
+        isEditingModuleNameError: true,
       };
     default:
       return state;

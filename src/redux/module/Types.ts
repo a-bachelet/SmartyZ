@@ -15,11 +15,13 @@ export interface ModuleState {
   isCurrentModuleMetricsLoading: boolean;
   isCurrentModuleAlertsLoading: boolean;
   isDeleteAlertLoading: boolean;
+  isEditingModuleNameLoading: boolean;
   isModuleListError: boolean;
   isCurrentModuleError: boolean;
   isCurrentModuleMetricsError: boolean;
   isCurrentModuleAlertsError: boolean;
   isDeleteAlertError: boolean;
+  isEditingModuleNameError: boolean;
 }
 
 //#endregion State
@@ -56,6 +58,10 @@ export const FETCH_CURRENT_MODULE_ALERTS_FAILURE =
 export const DELETE_ALERT_STARTED = "@module/DELETE_ALERT_STARTED";
 export const DELETE_ALERT_SUCCESS = "@module/DELETE_ALERT_SUCCESS";
 export const DELETE_ALERT_FAILURE = "@module/DELETE_ALERT_FAILURE";
+
+export const EDIT_MODULE_NAME_STARTED = "@module/EDIT_MODULE_NAME_STARTED";
+export const EDIT_MODULE_NAME_SUCCESS = "@module/EDIT_MODULE_NAME_SUCCESS";
+export const EDIT_MODULE_NAME_FAILURE = "@module/EDIT_MODULE_NAME_FAILURE";
 
 interface FetchModuleListStarted {
   type: typeof FETCH_MODULE_LIST_STARTED;
@@ -140,6 +146,21 @@ interface DeleteAlertFailure {
   payload: {};
 }
 
+interface EditModuleNameStarted {
+  type: typeof EDIT_MODULE_NAME_STARTED;
+  payload: {};
+}
+
+interface EditModuleNameSuccess {
+  type: typeof EDIT_MODULE_NAME_SUCCESS;
+  payload: { module: Module };
+}
+
+interface EditModuleNameFailure {
+  type: typeof EDIT_MODULE_NAME_FAILURE;
+  payload: {};
+}
+
 //#endregion Requests
 
 export type ModuleActionsTypes =
@@ -157,4 +178,7 @@ export type ModuleActionsTypes =
   | FetchCurrentModuleAlertsFailure
   | DeleteAlertStarted
   | DeleteAlertSuccess
-  | DeleteAlertFailure;
+  | DeleteAlertFailure
+  | EditModuleNameStarted
+  | EditModuleNameSuccess
+  | EditModuleNameFailure;
