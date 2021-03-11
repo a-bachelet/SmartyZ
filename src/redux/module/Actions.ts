@@ -54,6 +54,10 @@ export const fetchModuleList = (token: string) => {
               temperature: parseFloat(m.temperature).toFixed(2),
               humidity: parseFloat(m.humidity).toFixed(2),
             },
+            devices: [
+              { label: "Device 1", status: true },
+              { label: "Device 2", status: false },
+            ],
           };
         });
         dispatch(fetchModuleListSuccess(moduleList));
@@ -224,38 +228,39 @@ export const editModuleName = (
   return (dispatch: Dispatch) => {
     dispatch(editModuleNameStarted());
 
-    setTimeout(() => {
-      axios
-        .post(
-          `${API_URL}module/updateName`,
-          {
-            Id: moduleId,
-            Name: moduleName,
+    axios
+      .post(
+        `${API_URL}module/updateName`,
+        {
+          Id: moduleId,
+          Name: moduleName,
+        },
+        {
+          headers: {
+            Authorization: `Basic ${token}`,
           },
-          {
-            headers: {
-              Authorization: `Basic ${token}`,
+        }
+      )
+      .then((res) => {
+        dispatch(
+          editModuleNameSuccess({
+            id: res.data.id,
+            code: res.data.code,
+            label: res.data.name,
+            currentMetric: {
+              temperature: res.data.temperature,
+              humidity: res.data.humidity,
             },
-          }
-        )
-        .then((res) => {
-          dispatch(
-            editModuleNameSuccess({
-              id: res.data.id,
-              code: res.data.code,
-              label: res.data.name,
-              currentMetric: {
-                temperature: res.data.temperature,
-                humidity: res.data.humidity,
-              },
-              devices: res.data.devices,
-            })
-          );
-        })
-        .catch((err) => {
-          dispatch(editModuleNameFailure());
-        });
-    }, 3500);
+            devices: [
+              { label: "Device 1", status: true },
+              { label: "Device 2", status: false },
+            ],
+          })
+        );
+      })
+      .catch((err) => {
+        dispatch(editModuleNameFailure());
+      });
   };
 };
 

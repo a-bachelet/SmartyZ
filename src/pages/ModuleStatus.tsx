@@ -1,4 +1,6 @@
 // Partial Libraries Imports
+import { faThermometerHalf, faTint } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { RouteProp } from "@react-navigation/native";
 import { Text, View, StyleSheet } from "react-native";
 
@@ -7,87 +9,38 @@ import React from "react";
 
 // Navigation Imports
 import { ModuleStackParamList } from "./Module";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faChevronLeft, faPencilAlt, faThermometerHalf, faTint } from "@fortawesome/free-solid-svg-icons";
+
+// Components Imports
 import Device from "../components/module/status/Device";
+import Metrics from "../components/module/status/Metrics";
 
 export default (props: {
   route: RouteProp<ModuleStackParamList, "Status">;
 }) => {
+  const devices: JSX.Element[] = props.route.params.module.devices?.map(
+    (device) => {
+      return <Device label={device.label} enabled={device.status} />;
+    }
+  );
+
   return (
     <View>
-      
-      <View
-        style={{
-          height: "calc(100% - 110px)",
-          paddingTop: 15,
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-          backgroundColor: "#FEFEFE",
-        }}
-      >
-        <View style={styles.card}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FontAwesomeIcon
-              style={styles.icon}
-              size={48}
-              icon={faThermometerHalf}
-            />
-            <Text style={styles.metrics}>22°C</Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FontAwesomeIcon style={styles.icon} size={48} icon={faTint} />
-            <Text style={styles.metrics}>24%</Text>
-          </View>
-        </View>
-
-        <Device></Device>
-        <Device></Device>
+      <View style={styles.rootContainer}>
+        <Metrics
+          temperature={props.route.params.module.currentMetric.temperature}
+          humidity={props.route.params.module.currentMetric.humidity}
+        />
       </View>
+      {devices}
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
-  metrics: {
-    fontWeight: "700",
-    fontSize: 25,
-  },
-  icon: {
-    color: "#F5DF4D",
-  },
-  card: {
-    borderRadius: 25,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 20,
-    elevation: 10,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    marginTop: 25,
-    marginLeft: 14,
-    marginRight: 14,
-    paddingTop: 75,
-    paddingBottom: 75,
+  rootContainer: {
+    backgroundColor: "#FEFEFE",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingTop: 15,
   },
 });

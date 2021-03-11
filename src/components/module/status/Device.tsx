@@ -4,29 +4,18 @@ import { View, Text, Switch, StyleSheet } from "react-native";
 // Full Libraries Imports
 import React, { useState } from "react";
 
-export default () => {
-  const [isEnabled, setIsEnabled] = useState(false);
+export default (props: { label: string; enabled: boolean }) => {
+  const [isEnabled, setIsEnabled] = useState(props.enabled);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   return (
-    <View
-      style={styles.card}
-    >
-      <View
-        style={{
-          flex: 1,
-          flexWrap: "wrap",
-          flexDirection: "row",
-
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ marginLeft: 45, fontWeight: 700, fontSize: 16 }}>
-          Device 1
-        </Text>
+    <View style={styles.rootContainer}>
+      <View style={styles.subContainer}>
+        <View style={styles.textContainer}>
+          <Text style={styles.label}>{props.label}</Text>
+        </View>
         <Switch
-        style={{marginRight: 45}}
-          trackColor={{ false: 'rgba(34, 31, 31, 0.26)', true: "#2ECC71" }}
+          style={styles.toggle}
+          trackColor={{ false: "rgba(34, 31, 31, 0.26)", true: "#2ECC71" }}
           thumbColor={isEnabled ? "#2ECC71" : "#E74C3C"}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
@@ -37,9 +26,8 @@ export default () => {
   );
 };
 
-
 const styles = StyleSheet.create({
-  card: {
+  rootContainer: {
     borderRadius: 25,
     alignItems: "center",
     shadowColor: "#000",
@@ -58,5 +46,22 @@ const styles = StyleSheet.create({
     marginRight: 14,
     paddingTop: 25,
     paddingBottom: 25,
+  },
+  subContainer: {
+    flex: 1,
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  label: {
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  textContainer: {
+    marginLeft: 45,
+  },
+  toggle: {
+    marginRight: 45,
   },
 });
