@@ -14,13 +14,16 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Module from "../pages/Module";
 
+// Types Imports
+import ModuleType from "../types/Module";
+
 // Redux Imports
 import Store from "../redux/Store";
 
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
-  Module: { id: string };
+  Module: { module: ModuleType };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

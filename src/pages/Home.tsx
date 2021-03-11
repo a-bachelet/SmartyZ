@@ -44,7 +44,6 @@ export default function ({
   }, []);
 
   useEffect(() => {
-    console.log(moduleList);
     setModuleListToDisplay(
       moduleList.map((module) => (
         <Module
@@ -58,7 +57,9 @@ export default function ({
 
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.title}>{user?.name}</Text>
+      <View style={styles.title}>
+        <Text style={styles.titleText}>{user?.name}</Text>
+      </View>
       <View style={styles.moduleList}>
         {isModuleListError ? (
           <Text style={styles.errorMessage}>An error occured</Text>
@@ -84,15 +85,20 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   title: {
+    alignItems: "center",
+    flexDirection: "row",
+    height: 80,
+    justifyContent: "center",
+  },
+  titleText: {
     alignSelf: "center",
     color: "#FFFFFF",
     fontWeight: "500",
     fontSize: 24,
-    marginTop: 35,
   },
   moduleList: {
-    marginTop: "calc(100px - 35px - 24px)",
-    height: "calc(100% - 110px)",
+    marginTop: "",
+    height: "calc(100% - 80px)",
     paddingTop: 15,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

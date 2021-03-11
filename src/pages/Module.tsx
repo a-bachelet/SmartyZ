@@ -18,16 +18,19 @@ import Header from "../components/module/Header";
 
 // Navigation Imports
 import { RootStackParamList } from "../app/App";
+import { RouteProp } from "@react-navigation/native";
+import Module from "../types/Module";
 
 export type ModuleStackParamList = {
-  Status: { id: string };
-  Analytics: { id: string };
-  Alerts: { id: string };
+  Status: { module: Module };
+  Analytics: { module: Module };
+  Alerts: { module: Module };
 };
 
 const Stack = createStackNavigator<ModuleStackParamList>();
 
 export default (props: {
+  route: RouteProp<RootStackParamList, "Module">;
   navigation: StackNavigationProp<RootStackParamList, "Module">;
 }) => {
   const rootNavigation = props.navigation;
@@ -46,20 +49,41 @@ export default (props: {
               : scene.route.name;
 
           return (
-            <Header tab={title.toString()} rootNavigation={rootNavigation} />
+            <Header
+              tab={title.toString()}
+              rootNavigation={rootNavigation}
+              navigation={navigation}
+              name={props.route.params.module.label}
+              code={props.route.params.module.code}
+            />
           );
         },
       }}
     >
-      <Stack.Screen name="Status" component={ModuleStatus} options={{}} />
-      <Stack.Screen name="Analytics" component={ModuleAnalytics} options={{}} />
-      <Stack.Screen name="Alerts" component={ModuleAlerts} options={{}} />
+      <Stack.Screen
+        name="Status"
+        component={ModuleStatus}
+        options={{}}
+        initialParams={{ module: props.route.params.module }}
+      />
+      <Stack.Screen
+        name="Analytics"
+        component={ModuleAnalytics}
+        options={{}}
+        initialParams={{ module: props.route.params.module }}
+      />
+      <Stack.Screen
+        name="Alerts"
+        component={ModuleAlerts}
+        options={{}}
+        initialParams={{ module: props.route.params.module }}
+      />
     </Stack.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
   rootContainer: {
-    backgroundColor: "#3B3B3B",
+    backgroundColor: "#FEFEFE",
   },
 });

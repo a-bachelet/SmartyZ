@@ -22,16 +22,13 @@ export default (props: {
   module: Module;
   navigation: StackNavigationProp<RootStackParamList, "Home">;
 }) => {
-  const goToModule = (id: string) => {
-    props.navigation.push("Module", { id });
+  const goToModule = () => {
+    props.navigation.push("Module", { module: props.module });
   };
 
   return (
     <View style={styles.rootContainer}>
-      <Pressable
-        style={styles.innerContainer}
-        onPress={() => goToModule(props.module.id)}
-      >
+      <Pressable style={styles.innerContainer} onPress={goToModule}>
         <FontAwesomeIcon style={styles.colorSucces} icon={faCircle} />
 
         <Text>{props.module.label}</Text>
