@@ -1,4 +1,5 @@
 // Redux Types Imports
+import Alert from "../../types/Alert";
 import {
   ModuleState,
   ModuleActionsTypes,
@@ -17,6 +18,15 @@ import {
   DELETE_ALERT_STARTED,
   DELETE_ALERT_SUCCESS,
   DELETE_ALERT_FAILURE,
+  EDIT_MODULE_NAME_STARTED,
+  EDIT_MODULE_NAME_SUCCESS,
+  EDIT_MODULE_NAME_FAILURE,
+  FETCH_CURRENT_MODULE_ANALYTICS_STARTED,
+  FETCH_CURRENT_MODULE_ANALYTICS_SUCCESS,
+  FETCH_CURRENT_MODULE_ANALYTICS_FAILURE,
+  FETCH_CURRENT_MODULE_ALERTS_COUNT_STARTED,
+  FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS,
+  FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE,
 } from "./Types";
 
 const initialState: ModuleState = {
@@ -24,16 +34,22 @@ const initialState: ModuleState = {
   currentModule: null,
   currentModuleMetrics: null,
   currentModuleAlerts: [],
+  currentModuleAnalytics: [],
+  currentModuleAlertsCount: 0,
   isModuleListLoading: false,
   isModuleListError: false,
   isCurrentModuleLoading: false,
   isCurrentModuleAlertsLoading: false,
-  isDeleteAlertLoading: true,
+  isDeleteAlertLoading: false,
+  isEditingModuleNameLoading: false,
+  isCurrentModuleAnalyticsLoading: false,
   isCurrentModuleError: false,
   isCurrentModuleMetricsLoading: false,
   isCurrentModuleMetricsError: false,
   isCurrentModuleAlertsError: false,
   isDeleteAlertError: false,
+  isEditingModuleNameError: false,
+  isCurrentModuleAnalyticsError: false,
 };
 
 export default (
@@ -100,6 +116,7 @@ export default (
     case FETCH_CURRENT_MODULE_ALERTS_STARTED:
       return {
         ...state,
+        isCurrentModuleAlertsCountLoading: true,
         isCurrentModuleAlertsLoading: true,
         isCurrentModuleAlertsError: false,
       };
@@ -107,12 +124,15 @@ export default (
       return {
         ...state,
         currentModuleAlerts: action.payload.alerts,
+        currentModuleAlertsCount: action.payload.alerts.length,
+        isCurrentModuleAlertsCountLoading: false,
         isCurrentModuleAlertsLoading: false,
         isCurrentModuleAlertsError: false,
       };
     case FETCH_CURRENT_MODULE_ALERTS_FAILURE:
       return {
         ...state,
+        isCurrentModuleAlertsCountLoading: false,
         isCurrentModuleAlertsLoading: false,
         isCurrentModuleAlertsError: true,
       };
@@ -123,8 +143,15 @@ export default (
         isDeleteAlertError: false,
       };
     case DELETE_ALERT_SUCCESS:
+      const newAlerts = state.currentModuleAlerts;
+      newAlerts.splice(
+        newAlerts.findIndex((a) => a.id === action.payload.alertId),
+        1
+      );
       return {
         ...state,
+        currentModuleAlerts: [...newAlerts],
+        currentModuleAlertsCount: newAlerts.length,
         isDeleteAlertLoading: false,
         isDeleteAlertError: false,
       };
@@ -133,6 +160,70 @@ export default (
         ...state,
         isDeleteAlertLoading: false,
         isDeleteAlertError: true,
+      };
+    case EDIT_MODULE_NAME_STARTED:
+      return {
+        ...state,
+        isEditingModuleNameLoading: true,
+        isEditingModuleNameError: false,
+      };
+    case EDIT_MODULE_NAME_SUCCESS:
+      return {
+        ...state,
+        moduleList: state.moduleList.map((module) => {
+          if (module.id === action.payload.module.id) {
+            module.label = action.payload.module.label;
+          }
+
+          return module;
+        }),
+        currentModule: action.payload.module,
+        isEditingModuleNameLoading: false,
+        isEditingModuleNameError: false,
+      };
+    case EDIT_MODULE_NAME_FAILURE:
+      return {
+        ...state,
+        isEditingModuleNameLoading: false,
+        isEditingModuleNameError: true,
+      };
+    case FETCH_CURRENT_MODULE_ANALYTICS_STARTED:
+      return {
+        ...state,
+        isCurrentModuleAlertsLoading: true,
+        isCurrentModuleAnalyticsError: false,
+      };
+    case FETCH_CURRENT_MODULE_ANALYTICS_SUCCESS:
+      return {
+        ...state,
+        isCurrentModuleAnalyticsLoading: false,
+        isCurrentModuleAnalyticsError: false,
+        currentModuleAnalytics: action.payload.analytics,
+      };
+    case FETCH_CURRENT_MODULE_ANALYTICS_FAILURE:
+      return {
+        ...state,
+        isCurrentModuleAnalyticsLoading: false,
+        isCurrentModuleAnalyticsError: true,
+      };
+    case FETCH_CURRENT_MODULE_ALERTS_COUNT_STARTED:
+      return {
+        ...state,
+        isCurrentModuleAlertsCountLoading: true,
+        isCurrentModuleAlertsCountError: false,
+      };
+    case FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS:
+      return {
+        ...state,
+        currentModuleAlertsCount: action.payload.count,
+        isCurrentModuleAlertsCountLoading: false,
+        isCurrentModuleAlertsCountError: false,
+      };
+    case FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE:
+      return {
+        ...state,
+        isCurrentModuleAlertsCountLoading: false,
+        isCurrentModuleAlertsCountError: true,
       };
     default:
       return state;

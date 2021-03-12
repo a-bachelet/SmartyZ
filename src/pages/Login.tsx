@@ -22,13 +22,20 @@ import { RootStackParamList } from "../app/App";
 import { RootState } from "../redux/CombineReducers";
 import { fetchUser } from "../redux/user/Actions";
 
+// Environment Imports
+import { ENVIRONMENT } from "../../env.json";
+
 export default function ({
   navigation,
 }: {
   navigation: StackNavigationProp<RootStackParamList, "Login">;
 }) {
-  const [usernameValue, onChangeUsername] = React.useState("");
-  const [passwordValue, onChangePassword] = React.useState("");
+  const [usernameValue, onChangeUsername] = React.useState(
+    ENVIRONMENT === "dev" ? "User1" : ""
+  );
+  const [passwordValue, onChangePassword] = React.useState(
+    ENVIRONMENT === "dev" ? "Azerty@123" : ""
+  );
 
   const dispatch = useDispatch();
 
@@ -37,13 +44,6 @@ export default function ({
   );
 
   const isUserError = useSelector((state: RootState) => state.user.isUserError);
-
-  useSelector((state: RootState) => {
-    if (state.user.user) {
-      navigation.push("Home");
-    }
-    return state.user.user;
-  });
 
   return (
     <View style={styles.rootContainer}>
@@ -75,7 +75,7 @@ export default function ({
           style={styles.loginButton}
           disabled={!usernameValue || !passwordValue || isUserLoading}
           onPress={() => {
-            dispatch(fetchUser(usernameValue, passwordValue));
+            dispatch(fetchUser(usernameValue, passwordValue, navigation));
           }}
         >
           <Text style={styles.loginButtonText}>Login</Text>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: "#F5DF4D",
-    marginBottom: "100px",
+    marginBottom: 100,
   },
   input: {
     backgroundColor: "#FEFEFE",
@@ -106,13 +106,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 22,
     height: 40,
-    marginBottom: "35px",
-    minHeight: "72px",
-    paddingLeft: "40px",
+    marginBottom: 35,
+    minHeight: 72,
+    paddingLeft: 40,
     width: "90%",
   },
   errorMessage: {
-    marginBottom: "35px",
+    marginBottom: 35,
     color: "#FF0000",
     fontSize: 18,
   },
@@ -121,11 +121,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5DF4D",
     borderRadius: 25,
     justifyContent: "center",
-    minHeight: "50px",
+    minHeight: 50,
     width: "90%",
   },
   activityIndicator: {
-    minHeight: "50px",
+    minHeight: 50,
   },
   loginButtonText: {
     color: "#FFFFFF",

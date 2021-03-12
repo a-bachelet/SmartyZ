@@ -12,13 +12,27 @@ import React from "react";
 // Pages Imports
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Module from "../pages/Module";
+
+// Types Imports
+import ModuleType from "../types/Module";
 
 // Redux Imports
 import Store from "../redux/Store";
 
+// Sentry Imports
+import * as Sentry from 'sentry-expo';
+
+Sentry.init({
+  dsn: 'https://4245efd413ae497abaa8e2a7e730393e@o547706.ingest.sentry.io/5670312',
+  enableInExpoDevelopment: true,
+  debug: false,
+});
+
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
+  Module: { module: ModuleType };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -37,6 +51,11 @@ export default () => {
             name="Home"
             options={{ headerShown: false }}
             component={Home}
+          />
+          <Stack.Screen
+            name="Module"
+            options={{ headerShown: false }}
+            component={Module}
           />
         </Stack.Navigator>
       </NavigationContainer>
