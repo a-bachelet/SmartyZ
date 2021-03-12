@@ -1,4 +1,4 @@
 {
   "ENVIRONMENT": "prod",
-  "API_URL": "http://localhost-prod:55002/api/"
+  "API_URL": "http://smartyzapi.0d3495e1ac8c44d59cb9.westeurope.aksapp.io/api/"
 }
