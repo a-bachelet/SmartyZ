@@ -35,6 +35,7 @@ export interface ModuleState {
 
 //#region Requests
 
+export const CLEAR_MODULE_DATA = "@module/CLEAR_DATA";
 export const FETCH_MODULE_LIST_STARTED = "@module/FETCH_MODULE_LIST_STARTED";
 export const FETCH_MODULE_LIST_SUCCESS = "@module/FETCH_MODULE_LIST_SUCCESS";
 export const FETCH_MODULE_LIST_FAILURE = "@module/FETCH_MODULE_LIST_FAILURE";
@@ -83,6 +84,11 @@ export const FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS =
   "@module/FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS";
 export const FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE =
   "@module/FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE";
+
+interface ClearData {
+  type: typeof CLEAR_MODULE_DATA;
+  payload: {};
+}
 
 interface FetchModuleListStarted {
   type: typeof FETCH_MODULE_LIST_STARTED;
@@ -219,6 +225,7 @@ interface FetchCurrentModuleAlertsCountFailure {
 //#endregion Requests
 
 export type ModuleActionsTypes =
+  | ClearData
   | FetchModuleListStarted
   | FetchModuleListSuccess
   | FetchModuleListFailure

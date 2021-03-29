@@ -5,6 +5,7 @@ import {
   FETCH_USER_STARTED,
   FETCH_USER_SUCCESS,
   FETCH_USER_FAILURE,
+  LOGOUT
 } from "./Types";
 
 const initialState: UserState = {
@@ -35,6 +36,13 @@ export default (
         ...state,
         isUserLoading: false,
         isUserError: true,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        user: null,
+        isUserLoading: false,
+        isUserError: false,
       };
     default:
       return state;
