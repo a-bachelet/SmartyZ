@@ -85,6 +85,8 @@ export const FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS =
 export const FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE =
   "@module/FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE";
 
+export const TURN_ON_OFF_DEVICE = "@module/TURN_ON_OFF_DEVICE";
+
 interface ClearData {
   type: typeof CLEAR_MODULE_DATA;
   payload: {};
@@ -222,6 +224,13 @@ interface FetchCurrentModuleAlertsCountFailure {
   payload: {};
 }
 
+interface TurnOnOffDevice {
+  type: typeof TURN_ON_OFF_DEVICE;
+  payload: {
+    module: Module;
+  };
+}
+
 //#endregion Requests
 
 export type ModuleActionsTypes =
@@ -249,4 +258,5 @@ export type ModuleActionsTypes =
   | FetchCurrentModuleAnalyticsFailure
   | FetchCurrentModuleAlertsCountStarted
   | FetchCurrentModuleAlertsCountSuccess
-  | FetchCurrentModuleAlertsCountFailure;
+  | FetchCurrentModuleAlertsCountFailure
+  | TurnOnOffDevice;

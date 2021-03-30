@@ -1,4 +1,4 @@
 export default interface Metric {
-  temperature: number;
-  humidity: number;
+  temperature: number | string;
+  humidity: number | string;
 }

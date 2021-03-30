@@ -33,6 +33,7 @@ import {
   FETCH_MODULE_LIST_FAILURE,
   FETCH_MODULE_LIST_STARTED,
   FETCH_MODULE_LIST_SUCCESS,
+  TURN_ON_OFF_DEVICE,
 } from "./Types";
 
 // Types Imports
@@ -52,7 +53,7 @@ export const fetchModuleList = (token: string) => {
         },
       })
       .then((res) => {
-        const moduleList = res.data.map((m: any) => {
+        const moduleList: Module[] = res.data.map((m: any) => {
           return {
             id: m.id,
             code: m.code,
@@ -61,10 +62,9 @@ export const fetchModuleList = (token: string) => {
               temperature: parseFloat(m.temperature).toFixed(2),
               humidity: parseFloat(m.humidity).toFixed(2),
             },
-            devices: [
-              { label: "Device 1", status: true },
-              { label: "Device 2", status: false },
-            ],
+            status: m.status,
+            devices: [],
+            alertsCount: m.alertsCount,
           };
         });
         dispatch(fetchModuleListSuccess(moduleList));
@@ -101,7 +101,24 @@ export const fetchCurrentModule = (token: string, id: string) => {
         },
       })
       .then((res) => {
-        dispatch(fetchCurrentModuleSuccess(res.data));
+        const module: Module = {
+          id: res.data.id,
+          code: res.data.code,
+          label: res.data.name,
+          currentMetric: {
+            temperature: parseFloat(res.data.temperature).toFixed(2),
+            humidity: parseFloat(res.data.humidity).toFixed(2),
+          },
+          status: res.data.status,
+          devices: res.data.devices.map((d: any) => ({
+            id: d.id,
+            label: d.name,
+            status: d.status,
+          })),
+          alertsCount: res.data.alertsCount,
+        };
+
+        dispatch(fetchCurrentModuleSuccess(module));
       })
       .catch((err) => {
         dispatch(fetchCurrentModuleFailure());
@@ -113,7 +130,7 @@ const fetchCurrentModuleStarted = () => ({
   type: FETCH_CURRENT_MODULE_STARTED,
 });
 
-const fetchCurrentModuleSuccess = (currentModule: Module | null) => ({
+export const fetchCurrentModuleSuccess = (currentModule: Module | null) => ({
   type: FETCH_CURRENT_MODULE_SUCCESS,
   payload: {
     currentModule,
@@ -369,3 +386,29 @@ const fetchCurrentModuleAlertsCountSuccess = (count: number) => ({
 const fetchCurrentModuleAlertsCountFailure = () => ({
   type: FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE,
 });
+
+export const turnOnOffDevice = (token: string, module: Module) => {
+  return (dispatch: Dispatch) => {
+    module.devices = module.devices.map((d) => {
+      d.status = !d.status;
+      return d;
+    });
+
+    axios
+      .post(
+        `${API_URL}module/${module.id}/device/${module.devices[0].id}/turnonoff`,
+        { Status: module.devices[0].status ? 1 : 0 },
+        {
+          headers: {
+            Authorization: `Basic ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: TURN_ON_OFF_DEVICE,
+          payload: { module },
+        });
+      });
+  };
+};

@@ -17,7 +17,13 @@ export default (props: {
 }) => {
   const devices: JSX.Element[] = props.route.params.module.devices?.map(
     (device) => {
-      return <Device label={device.label} enabled={device.status} />;
+      return (
+        <Device
+          label={device.label}
+          enabled={device.status}
+          module={props.route.params.module}
+        />
+      );
     }
   );
 

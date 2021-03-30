@@ -28,6 +28,7 @@ import {
   FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS,
   FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE,
   CLEAR_MODULE_DATA,
+  TURN_ON_OFF_DEVICE,
 } from "./Types";
 
 const initialState: ModuleState = {
@@ -181,6 +182,12 @@ export default (
         ...state,
         currentModuleAlerts: [...newAlerts],
         currentModuleAlertsCount: newAlerts.length,
+        moduleList: state.moduleList.map((m) => {
+          if (m.id === state.currentModule?.id) {
+            m.alertsCount -= 1;
+          }
+          return m;
+        }),
         isDeleteAlertLoading: false,
         isDeleteAlertError: false,
       };
@@ -253,6 +260,11 @@ export default (
         ...state,
         isCurrentModuleAlertsCountLoading: false,
         isCurrentModuleAlertsCountError: true,
+      };
+    case TURN_ON_OFF_DEVICE:
+      return {
+        ...state,
+        currentModule: action.payload.module,
       };
     default:
       return state;

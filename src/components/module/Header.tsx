@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   editModuleName,
   fetchCurrentModuleAlertsCount,
+  fetchCurrentModuleSuccess,
 } from "../../redux/module/Actions";
 import { RootState } from "../../redux/CombineReducers";
 
@@ -114,11 +115,16 @@ export default function (props: {
     setEditing(!editing);
   };
 
+  const goBack = () => {
+    dispatch(fetchCurrentModuleSuccess(null));
+    props.rootNavigation.goBack();
+  };
+
   return (
     <>
       <View style={styles.rootContainer}>
         <View style={styles.topMenuContainer}>
-          <Pressable onPress={props.rootNavigation.goBack}>
+          <Pressable onPress={goBack}>
             <FontAwesomeIcon
               style={styles.colorPrimary}
               size={25}

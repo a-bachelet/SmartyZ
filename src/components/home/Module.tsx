@@ -29,7 +29,10 @@ export default (props: {
   return (
     <View style={styles.rootContainer}>
       <Pressable style={styles.innerContainer} onPress={goToModule}>
-        <FontAwesomeIcon style={styles.colorSucces} icon={faCircle} />
+        <FontAwesomeIcon
+          style={props.module.status ? styles.colorSucces : styles.colorDanger}
+          icon={faCircle}
+        />
 
         <Text>{props.module.label}</Text>
 
@@ -56,6 +59,14 @@ export default (props: {
           size={25}
           icon={faChevronRight}
         />
+
+        {props.module.alertsCount > 0 && (
+          <View style={styles.alertsCircle}>
+            <Text style={styles.alertsCircleText}>
+              {props.module.alertsCount}
+            </Text>
+          </View>
+        )}
       </Pressable>
     </View>
   );
@@ -94,5 +105,27 @@ const styles = StyleSheet.create({
   },
   colorSucces: {
     color: "#2ECC71",
+  },
+  colorDanger: {
+    color: "#e74c3c",
+  },
+  alertsCircle: {
+    zIndex: 999,
+    position: "absolute",
+    right: -3,
+    top: -3,
+    alignItems: "center",
+    backgroundColor: "#e74c3c",
+    borderRadius: 100,
+    height: 20,
+    justifyContent: "center",
+    marginLeft: 6,
+    textAlign: "center",
+    width: 20,
+  },
+  alertsCircleText: {
+    color: "#FFF",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 });

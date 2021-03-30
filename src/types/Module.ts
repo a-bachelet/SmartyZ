@@ -8,4 +8,6 @@ export default interface Module {
   code: string;
   currentMetric: Metric;
   devices: Device[];
+  alertsCount: number;
+  status: boolean;
 }

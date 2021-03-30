@@ -1,6 +1,12 @@
 // Partial libraries Imports
 import { StackNavigationProp } from "@react-navigation/stack";
-import { View, Text, StyleSheet, ActivityIndicator, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -29,6 +35,7 @@ export default function ({
   const user = useSelector((state: RootState) => state.user.user);
 
   const moduleList = useSelector((state: RootState) => state.module.moduleList);
+
   const isModuleListLoading = useSelector(
     (state: RootState) => state.module.isModuleListLoading
   );
@@ -65,15 +72,15 @@ export default function ({
   return (
     <View style={styles.rootContainer}>
       <View style={styles.title}>
-        <View style={styles.paddedView}/>
+        <View style={styles.paddedView} />
         <Text style={styles.titleText}>{user?.name}</Text>
         <Pressable onPress={logout}>
-            <FontAwesomeIcon
-              style={styles.logoutButton}
-              size={25}
-              icon={faSignOutAlt}
-            />
-          </Pressable>
+          <FontAwesomeIcon
+            style={styles.logoutButton}
+            size={25}
+            icon={faSignOutAlt}
+          />
+        </Pressable>
       </View>
       <View style={styles.moduleList}>
         {isModuleListError ? (
@@ -133,6 +140,6 @@ const styles = StyleSheet.create({
     color: "#F5DF4D",
   },
   paddedView: {
-    paddingLeft: 50
-  }
+    paddingLeft: 50,
+  },
 });

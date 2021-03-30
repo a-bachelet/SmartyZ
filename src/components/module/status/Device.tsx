@@ -3,10 +3,22 @@ import { View, Text, Switch, StyleSheet } from "react-native";
 
 // Full Libraries Imports
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../redux/CombineReducers";
+import { turnOnOffDevice } from "../../../redux/module/Actions";
+import Module from "../../../types/Module";
 
-export default (props: { label: string; enabled: boolean }) => {
+export default (props: { label: string; enabled: boolean; module: Module }) => {
   const [isEnabled, setIsEnabled] = useState(props.enabled);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user.user);
+
+  const toggleSwitch = () => {
+    dispatch(turnOnOffDevice(user?.token || "", props.module));
+    setIsEnabled((previousState) => !previousState);
+  };
   return (
     <View style={styles.rootContainer}>
       <View style={styles.subContainer}>
