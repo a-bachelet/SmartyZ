@@ -1,6 +1,4 @@
 // Partial Libraries Imports
-import { faThermometerHalf } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { StackNavigationProp } from "@react-navigation/stack";
 import {
   TextInput,
@@ -9,6 +7,7 @@ import {
   View,
   ActivityIndicator,
   StyleSheet,
+  Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -47,11 +46,15 @@ export default function ({
 
   return (
     <View style={styles.rootContainer}>
-      <FontAwesomeIcon
-        style={styles.icon}
-        size={152}
-        icon={faThermometerHalf}
+      <Image
+        style={styles.logoSmartyz}
+        source={{
+          uri: 'https://i.imgur.com/ii1XQ7l.png',
+        }}
       />
+      <Text style={styles.caption}>
+        By Algeco
+      </Text>
       <TextInput
         textContentType="username"
         placeholder="Username"
@@ -95,10 +98,6 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
   },
-  icon: {
-    color: "#F5DF4D",
-    marginBottom: 100,
-  },
   input: {
     backgroundColor: "#FEFEFE",
     borderColor: "gray",
@@ -128,7 +127,18 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   loginButtonText: {
-    color: "#FFFFFF",
+    color: "#3B3B3B",
     fontSize: 22,
   },
+  logoSmartyz: {
+    width: 170,
+    height: 155,
+    marginBottom: 100,
+  },
+  caption: {
+    color: "#FFF",
+    fontSize: 20,
+    marginTop: -100,
+    marginBottom: 50
+  }
 });
