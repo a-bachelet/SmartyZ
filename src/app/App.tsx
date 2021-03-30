@@ -5,9 +5,11 @@ import "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { ToastAndroid, Platform } from "react-native";
 
 // Full Libraries Imports
 import React from "react";
+import NetInfo from '@react-native-community/netinfo';
 
 // Pages Imports
 import Home from "../pages/Home";
@@ -36,6 +38,16 @@ export type RootStackParamList = {
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
+
+let hasAlreadyLostConnection: boolean = false;
+
+NetInfo.addEventListener(state => {
+  if ( state.isConnected && hasAlreadyLostConnection && Platform.OS === 'android') {
+    ToastAndroid.show('Connexion internet retrouvée.', ToastAndroid.SHORT)
+  } else if (!state.isConnected && Platform.OS === 'android') {
+    ToastAndroid.show('Connexion internet perdue.', ToastAndroid.SHORT)
+  }
+});
 
 export default () => {
   return (
