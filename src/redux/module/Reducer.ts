@@ -1,5 +1,4 @@
 // Redux Types Imports
-import Alert from "../../types/Alert";
 import {
   ModuleState,
   ModuleActionsTypes,
