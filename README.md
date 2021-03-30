@@ -1,4 +1,4 @@
-<img align="left" style="margin-right:10px" src="https://i.imgur.com/Pgs94yv.png"/>
+<img align="left" style="margin-right:10px" src="https://i.imgur.com/ii1XQ7l.png"/>
 
 # SmartyZ
 [![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://install.appcenter.ms/users/simon.cotelle/apps/SmartyZ)
