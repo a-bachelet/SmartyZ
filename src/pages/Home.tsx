@@ -1,7 +1,9 @@
 // Partial libraries Imports
 import { StackNavigationProp } from "@react-navigation/stack";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Pressable } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 // Full Libraries Imports
 import React, { useEffect, useState } from "react";
@@ -12,6 +14,7 @@ import { RootState } from "../redux/CombineReducers";
 
 // Redux Actions Imports
 import { fetchModuleList } from "../redux/module/Actions";
+import { logoutUser } from "../redux/user/Actions";
 
 // Navigation Imports
 import { RootStackParamList } from "../app/App";
@@ -55,10 +58,22 @@ export default function ({
     );
   }, [moduleList]);
 
+  const logout = () => {
+    dispatch(logoutUser(navigation));
+  };
+
   return (
     <View style={styles.rootContainer}>
       <View style={styles.title}>
+        <View style={styles.paddedView}/>
         <Text style={styles.titleText}>{user?.name}</Text>
+        <Pressable onPress={logout}>
+            <FontAwesomeIcon
+              style={styles.logoutButton}
+              size={25}
+              icon={faSignOutAlt}
+            />
+          </Pressable>
       </View>
       <View style={styles.moduleList}>
         {isModuleListError ? (
@@ -88,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     height: 80,
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   titleText: {
     alignSelf: "center",
@@ -113,4 +128,11 @@ const styles = StyleSheet.create({
     color: "#FF0000",
     fontSize: 18,
   },
+  logoutButton: {
+    paddingRight: 10,
+    color: "#F5DF4D",
+  },
+  paddedView: {
+    paddingLeft: 50
+  }
 });

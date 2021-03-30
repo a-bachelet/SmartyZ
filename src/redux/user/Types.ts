@@ -16,6 +16,7 @@ export interface UserState {
 export const FETCH_USER_STARTED = "@user/FETCH_USER_STARTED";
 export const FETCH_USER_SUCCESS = "@user/FETCH_USER_SUCCESS";
 export const FETCH_USER_FAILURE = "@user/FETCH_USER_FAILURE";
+export const LOGOUT = "@user/LOGOUT";
 
 interface FetchUserStarted {
   type: typeof FETCH_USER_STARTED;
@@ -34,9 +35,15 @@ interface FetchUserFailure {
   payload: {};
 }
 
+interface Logout {
+  type: typeof LOGOUT;
+  payload: {};
+}
+
 //#endregion Requests
 
 export type UserActionsTypes =
   | FetchUserStarted
   | FetchUserSuccess
-  | FetchUserFailure;
+  | FetchUserFailure
+  | Logout;

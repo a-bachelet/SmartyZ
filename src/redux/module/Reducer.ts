@@ -27,6 +27,7 @@ import {
   FETCH_CURRENT_MODULE_ALERTS_COUNT_STARTED,
   FETCH_CURRENT_MODULE_ALERTS_COUNT_SUCCESS,
   FETCH_CURRENT_MODULE_ALERTS_COUNT_FAILURE,
+  CLEAR_MODULE_DATA,
 } from "./Types";
 
 const initialState: ModuleState = {
@@ -50,6 +51,8 @@ const initialState: ModuleState = {
   isDeleteAlertError: false,
   isEditingModuleNameError: false,
   isCurrentModuleAnalyticsError: false,
+  isCurrentModuleAlertsCountLoading: false,
+  isCurrentModuleAlertsCountError: false,
 };
 
 export default (
@@ -57,6 +60,32 @@ export default (
   action: ModuleActionsTypes
 ): ModuleState => {
   switch (action.type) {
+    case CLEAR_MODULE_DATA:
+      return {
+        ...state,
+        moduleList: [],
+        currentModule: null,
+        currentModuleMetrics: null,
+        currentModuleAlerts: [],
+        currentModuleAnalytics: [],
+        currentModuleAlertsCount: 0,
+        isModuleListLoading: false,
+        isModuleListError: false,
+        isCurrentModuleLoading: false,
+        isCurrentModuleAlertsLoading: false,
+        isDeleteAlertLoading: false,
+        isEditingModuleNameLoading: false,
+        isCurrentModuleAnalyticsLoading: false,
+        isCurrentModuleError: false,
+        isCurrentModuleMetricsLoading: false,
+        isCurrentModuleMetricsError: false,
+        isCurrentModuleAlertsError: false,
+        isDeleteAlertError: false,
+        isEditingModuleNameError: false,
+        isCurrentModuleAnalyticsError: false,
+        isCurrentModuleAlertsCountLoading: false,
+        isCurrentModuleAlertsCountError: false,
+      };
     case FETCH_MODULE_LIST_STARTED:
       return {
         ...state,

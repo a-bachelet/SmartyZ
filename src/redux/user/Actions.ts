@@ -13,6 +13,7 @@ import {
   FETCH_USER_STARTED,
   FETCH_USER_SUCCESS,
   FETCH_USER_FAILURE,
+  LOGOUT,
 } from "./Types";
 
 // Types Imports
@@ -20,6 +21,7 @@ import User from "../../types/User";
 
 // Navigation Imports
 import { RootStackParamList } from "../../app/App";
+import { CLEAR_MODULE_DATA } from "../module/Types";
 
 export const fetchUser = (
   username: string,
@@ -66,3 +68,11 @@ const fetchUserSuccess = (user: User) => ({
 const fetchUserFailure = () => ({
   type: FETCH_USER_FAILURE,
 });
+
+export const logoutUser = (navigation: StackNavigationProp<RootStackParamList, "Home">) => {
+  return (dispatch: Dispatch) => {
+    dispatch({type: CLEAR_MODULE_DATA});
+    dispatch({type: LOGOUT});
+    navigation.navigate("Login");
+  };
+};
