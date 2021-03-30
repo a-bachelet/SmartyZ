@@ -5,7 +5,6 @@ import {
   faCheck,
   faChevronLeft,
   faPencilAlt,
-  faWindowClose,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import {
